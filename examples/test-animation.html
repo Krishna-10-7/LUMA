@@ -115,13 +115,18 @@
       log('Test 4: Change color of box2');
       const box = document.getElementById('box2');
       
-      LumaAnimate.to(box, {
-        backgroundColor: '#ff6b6b'
-      }, {
-        duration: 1000,
-        easing: 'easeInOutCubic',
-        onComplete: () => log('Test 4 complete')
-      });
+      // Set solid background first (gradient can't be animated)
+      box.style.background = '#667eea';
+      
+      setTimeout(() => {
+        LumaAnimate.to(box, {
+          backgroundColor: '#ff6b6b'
+        }, {
+          duration: 1000,
+          easing: 'easeInOutCubic',
+          onComplete: () => log('Test 4 complete')
+        });
+      }, 50);
     }
 
     function test5() {
@@ -133,8 +138,8 @@
         LumaAnimate.to(box, {
           transform: { translateY: 0 }
         }, {
-          duration: 1200,
-          easing: 'bounce',
+          duration: 1500,
+          easing: 'easeOutBounce',
           onComplete: () => log('Test 5 complete')
         });
       }, 100);

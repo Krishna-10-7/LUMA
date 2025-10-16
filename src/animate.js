@@ -84,10 +84,11 @@
         : (Math.pow(2, -20 * t + 10) * Math.sin((20 * t - 11.125) * c5)) / 2 + 1;
     },
     
-    // Bounce
+    // Bounce - smoother version
     bounce: t => {
       const n1 = 7.5625;
       const d1 = 2.75;
+      
       if (t < 1 / d1) {
         return n1 * t * t;
       } else if (t < 2 / d1) {
@@ -98,11 +99,24 @@
         return n1 * (t -= 2.625 / d1) * t + 0.984375;
       }
     },
-    easeInBounce: t => 1 - Easing.bounce(1 - t),
-    easeOutBounce: t => Easing.bounce(t),
+    easeInBounce: t => 1 - Easing.easeOutBounce(1 - t),
+    easeOutBounce: t => {
+      const n1 = 7.5625;
+      const d1 = 2.75;
+      
+      if (t < 1 / d1) {
+        return n1 * t * t;
+      } else if (t < 2 / d1) {
+        return n1 * (t -= 1.5 / d1) * t + 0.75;
+      } else if (t < 2.5 / d1) {
+        return n1 * (t -= 2.25 / d1) * t + 0.9375;
+      } else {
+        return n1 * (t -= 2.625 / d1) * t + 0.984375;
+      }
+    },
     easeInOutBounce: t => t < 0.5
-      ? (1 - Easing.bounce(1 - 2 * t)) / 2
-      : (1 + Easing.bounce(2 * t - 1)) / 2
+      ? (1 - Easing.easeOutBounce(1 - 2 * t)) / 2
+      : (1 + Easing.easeOutBounce(2 * t - 1)) / 2
   };
   
   // Spring physics for natural motion
@@ -221,7 +235,16 @@
     
     _getCurrentColorValue(property) {
       const computed = window.getComputedStyle(this.element);
-      return computed[property] || '#000000';
+      let color = computed[property];
+      
+      // If it's a gradient or complex value, default to a base color
+      if (!color || color === 'none' || color.includes('gradient')) {
+        // Get a reasonable default based on property
+        if (property === 'backgroundColor') return 'rgb(255, 255, 255)';
+        return 'rgb(0, 0, 0)';
+      }
+      
+      return color;
     }
     
     _parseTransform(transform) {

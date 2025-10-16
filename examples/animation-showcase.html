@@ -297,10 +297,10 @@
       transform: scale(1.05);
     }
 
-    .box-1 { background: #667eea; }
-    .box-2 { background: #f093fb; }
-    .box-3 { background: #4facfe; }
-    .box-4 { background: #43e97b; }
+    .box-1 { background: #667eea !important; }
+    .box-2 { background: #f093fb !important; }
+    .box-3 { background: #4facfe !important; }
+    .box-4 { background: #43e97b !important; }
 
     /* Stats Section */
     .stats-section {
@@ -755,8 +755,8 @@ tl.to('.box1', { opacity: 1 }, { duration: 500 })
       LumaAnimate.to(el, {
         transform: { translateY: 0 }
       }, {
-        duration: 1200,
-        easing: 'bounce'
+        duration: 1500,
+        easing: 'easeOutBounce'
       });
     }
 
@@ -950,7 +950,17 @@ tl.to('.box1', { opacity: 1 }, { duration: 500 })
     // Color Morphing
     const colors = ['#667eea', '#f093fb', '#4facfe', '#00f2fe', '#43e97b', '#f5576c'];
     function morphColor(el) {
-      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      // Get current background or default
+      const currentBg = el.style.backgroundColor || window.getComputedStyle(el).backgroundColor;
+      
+      // Pick a random different color
+      let randomColor;
+      do {
+        randomColor = colors[Math.floor(Math.random() * colors.length)];
+      } while (el.dataset.lastColor === randomColor);
+      
+      el.dataset.lastColor = randomColor;
+      
       LumaAnimate.to(el, {
         backgroundColor: randomColor
       }, {
