@@ -1,6 +1,6 @@
 {
   "name": "@lumajs/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "Next-generation JavaScript framework combining React-like reactivity, animations, and 3D capabilities in one lightweight library",
   "main": "dist/luma.cjs.js",
