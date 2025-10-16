@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LumaAnimate Showcase - Professional Animation Engine</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0e27;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      top: -200px;
+      right: -200px;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-50px, 50px) rotate(180deg); }
+    }
+
+    .hero-content {
+      text-align: center;
+      z-index: 10;
+      padding: 2rem;
+    }
+
+    .hero h1 {
+      font-size: 5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: white;
+      color: #667eea;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid white;
+    }
+
+    /* Section Container */
+    .section {
+      padding: 6rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 3rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: #888;
+      font-size: 1.2rem;
+      margin-bottom: 4rem;
+    }
+
+    /* Card Grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      transition: border-color 0.3s;
+    }
+
+    .card:hover {
+      border-color: rgba(102, 126, 234, 0.5);
+    }
+
+    .card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #667eea;
+    }
+
+    .card p {
+      color: #aaa;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    /* Demo Box */
+    .demo-box {
+      width: 100%;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .animated-element {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .control-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-small {
+      padding: 0.6rem 1.2rem;
+      background: rgba(102, 126, 234, 0.2);
+      border: 1px solid #667eea;
+      color: #667eea;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-small:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    /* Showcase Sections */
+    .showcase-section {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 6rem 2rem;
+      margin: 4rem 0;
+    }
+
+    /* Image Grid for Stagger */
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .image-item {
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: bold;
+      opacity: 0;
+      transform: translateY(50px) scale(0.8);
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .image-item:hover {
+      transform: scale(1.05) !important;
+    }
+
+    /* Timeline Demo */
+    .timeline-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      min-height: 300px;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .timeline-item {
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: bold;
+      opacity: 0;
+      transform: scale(0) rotate(-180deg);
+    }
+
+    /* Color Morph Demo */
+    .color-boxes {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .color-box {
+      width: 150px;
+      height: 150px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      transition: transform 0.2s;
+    }
+
+    .color-box:hover {
+      transform: scale(1.05);
+    }
+
+    .box-1 { background: #667eea; }
+    .box-2 { background: #f093fb; }
+    .box-3 { background: #4facfe; }
+    .box-4 { background: #43e97b; }
+
+    /* Stats Section */
+    .stats-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 6rem 2rem;
+      text-align: center;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      max-width: 1000px;
+      margin: 3rem auto 0;
+    }
+
+    .stat-item {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .stat-number {
+      font-size: 4rem;
+      font-weight: bold;
+      color: white;
+    }
+
+    .stat-label {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-top: 0.5rem;
+    }
+
+    /* Features List */
+    .features-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .feature-box {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      transform: scale(0.9);
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-box h4 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: #667eea;
+    }
+
+    .feature-box p {
+      color: #aaa;
+      line-height: 1.6;
+    }
+
+    /* Code Display */
+    .code-display {
+      background: #1a1a2e;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      color: #00ff00;
+      font-size: 0.9rem;
+      border: 1px solid rgba(102, 126, 234, 0.3);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: rgba(0, 0, 0, 0.3);
+      color: #888;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 3rem; }
+      .hero p { font-size: 1.2rem; }
+      .section-title { font-size: 2rem; }
+      .hero-buttons { flex-direction: column; width: 100%; max-width: 300px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">LumaAnimate</h1>
+      <p class="hero-subtitle">Professional Animation Engine for Modern Web</p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" onclick="scrollToDemo()">See Demos</button>
+        <button class="btn btn-secondary" onclick="location.reload()">Replay</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="stats-section">
+    <h2 style="font-size: 3rem; margin-bottom: 1rem;">Powerful & Lightweight</h2>
+    <p style="font-size: 1.2rem; opacity: 0.9;">Everything you need, nothing you don't</p>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">30+</div>
+        <div class="stat-label">Easing Functions</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">20+</div>
+        <div class="stat-label">Preset Animations</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">14</div>
+        <div class="stat-label">KB Minified</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">53%</div>
+        <div class="stat-label">Smaller than GSAP</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Demos -->
+  <div class="section" id="demos">
+    <h2 class="section-title">Interactive Demos</h2>
+    <p class="section-subtitle">Click buttons to see animations in action</p>
+
+    <div class="card-grid">
+      <!-- Transform Animations -->
+      <div class="card">
+        <h3>Transform Animations</h3>
+        <p>Rotate, scale, and translate with smooth easing</p>
+        <div class="demo-box">
+          <div class="animated-element transform-demo">Box</div>
+        </div>
+        <div class="control-buttons">
+          <button class="btn-small" onclick="animateRotate()">Rotate</button>
+          <button class="btn-small" onclick="animateScale()">Scale</button>
+          <button class="btn-small" onclick="animateMove()">Move</button>
+          <button class="btn-small" onclick="animateSpin()">Spin 360</button>
+        </div>
+      </div>
+
+      <!-- Physics-Based -->
+      <div class="card">
+        <h3>Physics-Based Motion</h3>
+        <p>Natural bounce and elastic animations</p>
+        <div class="demo-box">
+          <div class="animated-element physics-demo">Drop</div>
+        </div>
+        <div class="control-buttons">
+          <button class="btn-small" onclick="animateBounce()">Bounce</button>
+          <button class="btn-small" onclick="animateElastic()">Elastic</button>
+          <button class="btn-small" onclick="animateSpring()">Spring</button>
+        </div>
+      </div>
+
+      <!-- Attention Seekers -->
+      <div class="card">
+        <h3>Attention Seekers</h3>
+        <p>Pulse, shake, and other attention-grabbing effects</p>
+        <div class="demo-box">
+          <div class="animated-element attention-demo">Hey!</div>
+        </div>
+        <div class="control-buttons">
+          <button class="btn-small" onclick="animatePulse()">Pulse</button>
+          <button class="btn-small" onclick="animateShake()">Shake</button>
+          <button class="btn-small" onclick="animateSwing()">Swing</button>
+        </div>
+      </div>
+
+      <!-- Entrance Animations -->
+      <div class="card">
+        <h3>Entrance Effects</h3>
+        <p>Fade and slide animations for smooth entrances</p>
+        <div class="demo-box">
+          <div class="animated-element entrance-demo">Enter</div>
+        </div>
+        <div class="control-buttons">
+          <button class="btn-small" onclick="animateFadeIn()">Fade In</button>
+          <button class="btn-small" onclick="animateSlideUp()">Slide Up</button>
+          <button class="btn-small" onclick="animateZoomIn()">Zoom In</button>
+        </div>
+      </div>
+
+      <!-- Advanced Control -->
+      <div class="card">
+        <h3>Advanced Controls</h3>
+        <p>Pause, resume, reverse, and seek animations</p>
+        <div class="demo-box">
+          <div class="animated-element control-demo">Ctrl</div>
+        </div>
+        <div class="control-buttons">
+          <button class="btn-small" onclick="startControlDemo()">Start</button>
+          <button class="btn-small" onclick="pauseControlDemo()">Pause</button>
+          <button class="btn-small" onclick="resumeControlDemo()">Resume</button>
+          <button class="btn-small" onclick="reverseControlDemo()">Reverse</button>
+        </div>
+      </div>
+
+      <!-- Repeat & Yoyo -->
+      <div class="card">
+        <h3>Repeat & Yoyo</h3>
+        <p>Loop animations with reversing effects</p>
+        <div class="demo-box">
+          <div class="animated-element repeat-demo">Loop</div>
+        </div>
+        <div class="control-buttons">
+          <button class="btn-small" onclick="animateRepeat()">Repeat 3x</button>
+          <button class="btn-small" onclick="animateYoyo()">Yoyo</button>
+          <button class="btn-small" onclick="animateInfinite()">Heartbeat</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stagger Animation Showcase -->
+  <div class="showcase-section">
+    <div class="section">
+      <h2 class="section-title">Stagger Animations</h2>
+      <p class="section-subtitle">Animate multiple elements with sequential delays</p>
+      
+      <div class="image-grid" id="staggerGrid">
+        <div class="image-item">1</div>
+        <div class="image-item">2</div>
+        <div class="image-item">3</div>
+        <div class="image-item">4</div>
+        <div class="image-item">5</div>
+        <div class="image-item">6</div>
+        <div class="image-item">7</div>
+        <div class="image-item">8</div>
+      </div>
+
+      <div style="text-align: center; margin-top: 3rem;">
+        <button class="btn btn-primary" onclick="replayStagger()">Replay Stagger</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Color Morphing -->
+  <div class="section">
+    <h2 class="section-title">Color Morphing</h2>
+    <p class="section-subtitle">Smooth color transitions between any hex or RGB values</p>
+    
+    <div class="color-boxes">
+      <div class="color-box box-1" onclick="morphColor(this)">Click Me</div>
+      <div class="color-box box-2" onclick="morphColor(this)">Click Me</div>
+      <div class="color-box box-3" onclick="morphColor(this)">Click Me</div>
+      <div class="color-box box-4" onclick="morphColor(this)">Click Me</div>
+    </div>
+
+    <div class="code-display">
+LumaAnimate.to('.box', {
+  backgroundColor: '#f5576c',
+  color: '#ffffff'
+}, {
+  duration: 1000,
+  easing: 'easeInOutCubic'
+});</div>
+  </div>
+
+  <!-- Timeline Demo -->
+  <div class="showcase-section">
+    <div class="section">
+      <h2 class="section-title">Timeline Sequencing</h2>
+      <p class="section-subtitle">Orchestrate complex animation sequences</p>
+      
+      <div class="timeline-container">
+        <div class="timeline-item">1</div>
+        <div class="timeline-item">2</div>
+        <div class="timeline-item">3</div>
+        <div class="timeline-item">4</div>
+      </div>
+
+      <div style="text-align: center; margin-top: 3rem;">
+        <button class="btn btn-primary" onclick="playTimelineDemo()">Play Timeline</button>
+      </div>
+
+      <div class="code-display">
+const tl = LumaAnimate.timeline();
+tl.to('.box1', { opacity: 1 }, { duration: 500 })
+  .to('.box2', { opacity: 1 }, { duration: 500 })
+  .to('.box3', { opacity: 1 }, { duration: 500 })
+  .play();</div>
+    </div>
+  </div>
+
+  <!-- Features Grid -->
+  <div class="section">
+    <h2 class="section-title">Complete Feature Set</h2>
+    <p class="section-subtitle">Everything you need for production-ready animations</p>
+
+    <div class="features-list">
+      <div class="feature-box">
+        <div class="feature-icon">⚡</div>
+        <h4>30+ Easing Functions</h4>
+        <p>Including spring physics with customizable tension and friction</p>
+      </div>
+      <div class="feature-box">
+        <div class="feature-icon">🎬</div>
+        <h4>Timeline System</h4>
+        <p>Sequence animations with labels and precise timing control</p>
+      </div>
+      <div class="feature-box">
+        <div class="feature-icon">📜</div>
+        <h4>Scroll Triggers</h4>
+        <p>IntersectionObserver-based scroll animations</p>
+      </div>
+      <div class="feature-box">
+        <div class="feature-icon">🌈</div>
+        <h4>Color Morphing</h4>
+        <p>Smooth transitions between hex and RGB colors</p>
+      </div>
+      <div class="feature-box">
+        <div class="feature-icon">🔄</div>
+        <h4>Full Control</h4>
+        <p>Pause, resume, reverse, seek, and kill animations</p>
+      </div>
+      <div class="feature-box">
+        <div class="feature-icon">📦</div>
+        <h4>Tiny Bundle</h4>
+        <p>Only 14.34 KB minified, 53% smaller than GSAP</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>LumaAnimate v0.2.1 - Professional Animation Engine</p>
+    <p style="margin-top: 0.5rem;">14.34 KB minified | Zero dependencies | Production ready</p>
+  </div>
+
+  <!-- Load Animation Library -->
+  <script src="../dist/luma-animate.min.js"></script>
+  
+  <script>
+    // Global animation reference for controls
+    let controlAnim = null;
+
+    // Hero animations on load
+    window.addEventListener('load', () => {
+      LumaAnimate.to('.hero-title', {
+        opacity: 1,
+        transform: { translateY: 0 }
+      }, {
+        duration: 1000,
+        easing: 'easeOutCubic'
+      });
+
+      setTimeout(() => {
+        LumaAnimate.to('.hero-subtitle', {
+          opacity: 1,
+          transform: { translateY: 0 }
+        }, {
+          duration: 1000,
+          easing: 'easeOutCubic'
+        });
+      }, 300);
+
+      setTimeout(() => {
+        LumaAnimate.to('.hero-buttons', {
+          opacity: 1,
+          transform: { translateY: 0 }
+        }, {
+          duration: 1000,
+          easing: 'easeOutBack'
+        });
+      }, 600);
+
+      // Animate stats on scroll
+      animateStatsOnScroll();
+      
+      // Animate features on scroll
+      animateFeaturesOnScroll();
+
+      // Auto-play stagger when visible
+      autoPlayStagger();
+    });
+
+    // Scroll to demo section
+    function scrollToDemo() {
+      document.getElementById('demos').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Transform Demos
+    function animateRotate() {
+      const el = document.querySelector('.transform-demo');
+      LumaAnimate.to(el, {
+        transform: { rotate: 360 }
+      }, {
+        duration: 1000,
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    function animateScale() {
+      const el = document.querySelector('.transform-demo');
+      LumaAnimate.to(el, {
+        transform: { scale: 1.5 }
+      }, {
+        duration: 600,
+        easing: 'easeOutBack',
+        yoyo: true,
+        repeat: 1
+      });
+    }
+
+    function animateMove() {
+      const el = document.querySelector('.transform-demo');
+      LumaAnimate.to(el, {
+        transform: { translateX: 50 }
+      }, {
+        duration: 800,
+        easing: 'easeInOutCubic',
+        yoyo: true,
+        repeat: 1
+      });
+    }
+
+    function animateSpin() {
+      const el = document.querySelector('.transform-demo');
+      LumaAnimate.to(el, {
+        transform: { rotate: 720, scale: 1.3 }
+      }, {
+        duration: 1500,
+        easing: 'easeInOutBack'
+      });
+    }
+
+    // Physics Demos
+    function animateBounce() {
+      const el = document.querySelector('.physics-demo');
+      el.style.transform = 'translateY(-80px)';
+      LumaAnimate.to(el, {
+        transform: { translateY: 0 }
+      }, {
+        duration: 1200,
+        easing: 'bounce'
+      });
+    }
+
+    function animateElastic() {
+      const el = document.querySelector('.physics-demo');
+      el.style.transform = 'scale(0.3)';
+      LumaAnimate.to(el, {
+        transform: { scale: 1 }
+      }, {
+        duration: 1000,
+        easing: 'easeOutElastic'
+      });
+    }
+
+    function animateSpring() {
+      const el = document.querySelector('.physics-demo');
+      el.style.transform = 'translateY(-80px)';
+      LumaAnimate.to(el, {
+        transform: { translateY: 0 }
+      }, {
+        duration: 2000,
+        easing: LumaAnimate.easing.spring(170, 26)
+      });
+    }
+
+    // Attention Demos
+    function animatePulse() {
+      const el = document.querySelector('.attention-demo');
+      LumaAnimate.to(el, {
+        transform: { scale: 1.3 }
+      }, {
+        duration: 300,
+        easing: 'easeInOutQuad',
+        yoyo: true,
+        repeat: 3
+      });
+    }
+
+    function animateShake() {
+      const el = document.querySelector('.attention-demo');
+      LumaAnimate.to(el, {
+        transform: { translateX: 10 }
+      }, {
+        duration: 100,
+        easing: 'linear',
+        yoyo: true,
+        repeat: 5
+      });
+    }
+
+    function animateSwing() {
+      const el = document.querySelector('.attention-demo');
+      LumaAnimate.to(el, {
+        transform: { rotate: 15 }
+      }, {
+        duration: 500,
+        easing: 'easeInOutSine',
+        yoyo: true,
+        repeat: 3
+      });
+    }
+
+    // Entrance Demos
+    function animateFadeIn() {
+      const el = document.querySelector('.entrance-demo');
+      el.style.opacity = '0';
+      LumaAnimate.to(el, {
+        opacity: 1
+      }, {
+        duration: 800,
+        easing: 'easeOutCubic'
+      });
+    }
+
+    function animateSlideUp() {
+      const el = document.querySelector('.entrance-demo');
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(50px)';
+      LumaAnimate.to(el, {
+        opacity: 1,
+        transform: { translateY: 0 }
+      }, {
+        duration: 800,
+        easing: 'easeOutCubic'
+      });
+    }
+
+    function animateZoomIn() {
+      const el = document.querySelector('.entrance-demo');
+      el.style.opacity = '0';
+      el.style.transform = 'scale(0)';
+      LumaAnimate.to(el, {
+        opacity: 1,
+        transform: { scale: 1 }
+      }, {
+        duration: 600,
+        easing: 'easeOutBack'
+      });
+    }
+
+    // Control Demos
+    function startControlDemo() {
+      const el = document.querySelector('.control-demo');
+      el.style.transform = '';
+      controlAnim = LumaAnimate.to(el, {
+        transform: { translateX: 80 }
+      }, {
+        duration: 3000,
+        easing: 'linear'
+      });
+    }
+
+    function pauseControlDemo() {
+      if (controlAnim) controlAnim.pause();
+    }
+
+    function resumeControlDemo() {
+      if (controlAnim) controlAnim.resume();
+    }
+
+    function reverseControlDemo() {
+      if (controlAnim) controlAnim.reverse();
+    }
+
+    // Repeat Demos
+    function animateRepeat() {
+      const el = document.querySelector('.repeat-demo');
+      LumaAnimate.to(el, {
+        transform: { rotate: 120 }
+      }, {
+        duration: 400,
+        repeat: 3,
+        easing: 'easeInOutQuad'
+      });
+    }
+
+    function animateYoyo() {
+      const el = document.querySelector('.repeat-demo');
+      LumaAnimate.to(el, {
+        transform: { scale: 1.4 }
+      }, {
+        duration: 500,
+        repeat: 2,
+        yoyo: true,
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    function animateInfinite() {
+      const el = document.querySelector('.repeat-demo');
+      LumaAnimate.to(el, {
+        transform: { scale: 1.3 }
+      }, {
+        duration: 200,
+        repeat: 6,
+        yoyo: true,
+        easing: 'easeInOutQuad'
+      });
+    }
+
+    // Stagger Animation
+    function replayStagger() {
+      const items = document.querySelectorAll('.image-item');
+      items.forEach(item => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateY(50px) scale(0.8)';
+      });
+
+      LumaAnimate.stagger(items, {
+        opacity: 1,
+        transform: { translateY: 0, scale: 1 }
+      }, {
+        duration: 600,
+        stagger: 100,
+        easing: 'easeOutBack'
+      });
+    }
+
+    function autoPlayStagger() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setTimeout(replayStagger, 300);
+            observer.disconnect();
+          }
+        });
+      });
+      observer.observe(document.getElementById('staggerGrid'));
+    }
+
+    // Color Morphing
+    const colors = ['#667eea', '#f093fb', '#4facfe', '#00f2fe', '#43e97b', '#f5576c'];
+    function morphColor(el) {
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      LumaAnimate.to(el, {
+        backgroundColor: randomColor
+      }, {
+        duration: 800,
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    // Timeline Demo
+    function playTimelineDemo() {
+      const items = document.querySelectorAll('.timeline-item');
+      items.forEach(item => {
+        item.style.opacity = '0';
+        item.style.transform = 'scale(0) rotate(-180deg)';
+      });
+
+      const tl = LumaAnimate.timeline();
+      
+      tl.to(items[0], { opacity: 1, transform: { scale: 1, rotate: 0 } }, { duration: 500, easing: 'easeOutBack' })
+        .to(items[1], { opacity: 1, transform: { scale: 1, rotate: 0 } }, { duration: 500, easing: 'easeOutBack' })
+        .to(items[2], { opacity: 1, transform: { scale: 1, rotate: 0 } }, { duration: 500, easing: 'easeOutBack' })
+        .to(items[3], { opacity: 1, transform: { scale: 1, rotate: 0 } }, { duration: 500, easing: 'easeOutBack' })
+        .play();
+    }
+
+    // Animate stats on scroll
+    function animateStatsOnScroll() {
+      const statItems = document.querySelectorAll('.stat-item');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              LumaAnimate.to(entry.target, {
+                opacity: 1,
+                transform: { translateY: 0 }
+              }, {
+                duration: 600,
+                easing: 'easeOutCubic'
+              });
+
+              // Animate number
+              const numEl = entry.target.querySelector('.stat-number');
+              const text = numEl.textContent;
+              if (text.includes('%')) {
+                animateNumber(numEl, 0, 53, '%');
+              } else if (text.includes('+')) {
+                const num = parseInt(text);
+                animateNumber(numEl, 0, num, '+');
+              } else {
+                const num = parseInt(text);
+                animateNumber(numEl, 0, num, '');
+              }
+            }, index * 100);
+            observer.unobserve(entry.target);
+          }
+        });
+      });
+
+      statItems.forEach(item => observer.observe(item));
+    }
+
+    function animateNumber(el, start, end, suffix) {
+      let current = start;
+      const increment = (end - start) / 50;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= end) {
+          el.textContent = end + suffix;
+          clearInterval(timer);
+        } else {
+          el.textContent = Math.floor(current) + suffix;
+        }
+      }, 30);
+    }
+
+    // Animate features on scroll
+    function animateFeaturesOnScroll() {
+      const features = document.querySelectorAll('.feature-box');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              LumaAnimate.to(entry.target, {
+                opacity: 1,
+                transform: { scale: 1 }
+              }, {
+                duration: 600,
+                easing: 'easeOutBack'
+              });
+            }, index * 80);
+            observer.unobserve(entry.target);
+          }
+        });
+      });
+
+      features.forEach(feature => observer.observe(feature));
+    }
+  </script>
+
+</body>
+</html>
