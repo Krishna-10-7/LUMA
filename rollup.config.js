@@ -6,12 +6,12 @@ const banner = `/*!
  * @license MIT
  */`;
 
-const createConfig = (format, file, minify = false) => ({
-  input: 'src/index.js',
+const createConfig = (input, format, file, name, minify = false) => ({
+  input,
   output: {
     file,
     format,
-    name: format === 'umd' ? 'Luma' : undefined,
+    name: name || (format === 'umd' ? 'Luma' : undefined),
     banner,
     exports: 'named',
     sourcemap: true
@@ -20,15 +20,19 @@ const createConfig = (format, file, minify = false) => ({
 });
 
 export default [
-  // ESM build (for modern bundlers and <script type="module">)
-  createConfig('es', 'dist/luma.esm.js'),
-  createConfig('es', 'dist/luma.esm.min.js', true),
+  // LumaJS Core - ESM build (for modern bundlers and <script type="module">)
+  createConfig('src/index.js', 'es', 'dist/luma.esm.js'),
+  createConfig('src/index.js', 'es', 'dist/luma.esm.min.js', null, true),
   
-  // CommonJS build (for Node.js)
-  createConfig('cjs', 'dist/luma.cjs.js'),
-  createConfig('cjs', 'dist/luma.cjs.min.js', true),
+  // LumaJS Core - CommonJS build (for Node.js)
+  createConfig('src/index.js', 'cjs', 'dist/luma.cjs.js'),
+  createConfig('src/index.js', 'cjs', 'dist/luma.cjs.min.js', null, true),
   
-  // UMD build (for browsers via <script> tag)
-  createConfig('umd', 'dist/luma.umd.js'),
-  createConfig('umd', 'dist/luma.umd.min.js', true)
+  // LumaJS Core - UMD build (for browsers via <script> tag)
+  createConfig('src/index.js', 'umd', 'dist/luma.umd.js'),
+  createConfig('src/index.js', 'umd', 'dist/luma.umd.min.js', null, true),
+  
+  // LumaAnimate - Standalone Animation Engine
+  createConfig('src/animate.js', 'umd', 'dist/luma-animate.js', 'LumaAnimate'),
+  createConfig('src/animate.js', 'umd', 'dist/luma-animate.min.js', 'LumaAnimate', true)
 ];

@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LumaAnimate - Professional Animation Engine Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding: 2rem;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      opacity: 0;
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      font-weight: 300;
+      opacity: 0;
+      margin-bottom: 2rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      opacity: 0;
+      margin-bottom: 3rem;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .demo-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateY(50px);
+    }
+
+    .demo-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #667eea;
+    }
+
+    .demo-card p {
+      color: #666;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .demo-area {
+      min-height: 150px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .animated-box {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .animated-box:hover {
+      transform: scale(1.05);
+    }
+
+    .btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin: 0.25rem;
+    }
+
+    .btn:hover {
+      background: #5568d3;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .feature-showcase {
+      background: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .feature-showcase h2 {
+      font-size: 2.5rem;
+      color: #667eea;
+      margin-bottom: 3rem;
+      opacity: 0;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-item {
+      padding: 2rem;
+      border-radius: 12px;
+      background: #f8f9fa;
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+    }
+
+    .feature-item h3 {
+      color: #333;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .feature-item p {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .parallax-section {
+      min-height: 100vh;
+      background: #1a1a2e;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .parallax-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0.1;
+    }
+
+    .parallax-layer {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .parallax-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      max-width: 800px;
+      padding: 2rem;
+    }
+
+    .parallax-content h2 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .timeline-demo {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      padding: 4rem 2rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .timeline-demo h2 {
+      font-size: 2.5rem;
+      color: white;
+      margin-bottom: 2rem;
+      opacity: 0;
+    }
+
+    .timeline-boxes {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .timeline-box {
+      width: 100px;
+      height: 100px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #f5576c;
+      opacity: 0;
+      transform: scale(0) rotate(-180deg);
+    }
+
+    .color-morph-demo {
+      background: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .color-box {
+      width: 200px;
+      height: 200px;
+      background: #667eea;
+      border-radius: 20px;
+      margin: 2rem auto;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .stagger-demo {
+      background: #16213e;
+      padding: 4rem 2rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stagger-demo h2 {
+      color: white;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stagger-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .stagger-item {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 8px;
+      opacity: 0;
+      transform: translateY(50px) scale(0.5);
+    }
+
+    .spring-physics {
+      background: white;
+      padding: 4rem 2rem;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spring-box {
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border-radius: 20px;
+      margin: 2rem auto;
+      cursor: pointer;
+    }
+
+    .code-example {
+      background: #1a1a2e;
+      color: #00ff00;
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      text-align: left;
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+
+    .stats {
+      background: #0f3460;
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .stat-item {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .stat-label {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero p {
+        font-size: 1.2rem;
+      }
+
+      .demo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stagger-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .timeline-boxes {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1 class="hero-title">LumaAnimate</h1>
+    <p class="hero-desc">Production-Ready Animation Engine</p>
+    <p class="hero-subtitle">GSAP-like power, zero dependencies, 12KB minified</p>
+    <div class="btn-group">
+      <button class="btn" onclick="location.reload()">Replay Animations</button>
+    </div>
+  </div>
+
+  <!-- Feature Stats -->
+  <div class="stats">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number" data-target="30">0</div>
+        <div class="stat-label">Easing Functions</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="20">0</div>
+        <div class="stat-label">Preset Animations</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="12">0</div>
+        <div class="stat-label">KB Minified</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="100">0</div>
+        <div class="stat-label">Performance Score</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Demo Cards -->
+  <div class="demo-grid">
+    <!-- Basic Animations -->
+    <div class="demo-card">
+      <h2>Fade & Slide</h2>
+      <p>Classic entrance animations with smooth easing</p>
+      <div class="demo-area">
+        <div class="animated-box fade-box">Fade</div>
+      </div>
+      <div class="btn-group">
+        <button class="btn" onclick="animateFade()">Fade In</button>
+        <button class="btn" onclick="animateSlide()">Slide Up</button>
+      </div>
+    </div>
+
+    <!-- Transform Animations -->
+    <div class="demo-card">
+      <h2>Transforms</h2>
+      <p>Scale, rotate, and complex transforms</p>
+      <div class="demo-area">
+        <div class="animated-box transform-box">3D</div>
+      </div>
+      <div class="btn-group">
+        <button class="btn" onclick="animateRotate()">Rotate</button>
+        <button class="btn" onclick="animateScale()">Scale</button>
+        <button class="btn" onclick="animateFlip()">Flip</button>
+      </div>
+    </div>
+
+    <!-- Color Animations -->
+    <div class="demo-card">
+      <h2>Color Morphing</h2>
+      <p>Smooth color transitions and gradients</p>
+      <div class="demo-area">
+        <div class="animated-box color-box-demo">Color</div>
+      </div>
+      <div class="btn-group">
+        <button class="btn" onclick="animateColor()">Morph Color</button>
+        <button class="btn" onclick="animateBg()">Background</button>
+      </div>
+    </div>
+
+    <!-- Bounce & Elastic -->
+    <div class="demo-card">
+      <h2>Physics-Based</h2>
+      <p>Bounce, elastic, and spring animations</p>
+      <div class="demo-area">
+        <div class="animated-box physics-box">Bounce</div>
+      </div>
+      <div class="btn-group">
+        <button class="btn" onclick="animateBounce()">Bounce</button>
+        <button class="btn" onclick="animateElastic()">Elastic</button>
+        <button class="btn" onclick="animateSpring()">Spring</button>
+      </div>
+    </div>
+
+    <!-- Repeat & Yoyo -->
+    <div class="demo-card">
+      <h2>Advanced Control</h2>
+      <p>Repeat, yoyo, and animation chaining</p>
+      <div class="demo-area">
+        <div class="animated-box pulse-box">Pulse</div>
+      </div>
+      <div class="btn-group">
+        <button class="btn" onclick="animatePulse()">Pulse</button>
+        <button class="btn" onclick="animateShake()">Shake</button>
+        <button class="btn" onclick="animateHeartbeat()">Heartbeat</button>
+      </div>
+    </div>
+
+    <!-- Timeline Demo -->
+    <div class="demo-card">
+      <h2>Timeline Sequencing</h2>
+      <p>Orchestrate complex animation sequences</p>
+      <div class="demo-area" style="justify-content: space-around;">
+        <div class="animated-box seq-box-1" style="width: 50px; height: 50px;">1</div>
+        <div class="animated-box seq-box-2" style="width: 50px; height: 50px;">2</div>
+        <div class="animated-box seq-box-3" style="width: 50px; height: 50px;">3</div>
+      </div>
+      <div class="btn-group">
+        <button class="btn" onclick="animateSequence()">Play Sequence</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature Showcase -->
+  <div class="feature-showcase">
+    <h2 class="features-title">Powerful Features</h2>
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="feature-icon">A</div>
+        <h3>30+ Easing Functions</h3>
+        <p>Complete easing library including elastic, bounce, back, and custom spring physics</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">B</div>
+        <h3>Timeline Control</h3>
+        <p>Sequence animations with labels, offsets, and precise timing control</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">C</div>
+        <h3>Stagger Animations</h3>
+        <p>Batch animate multiple elements with customizable delay patterns</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">D</div>
+        <h3>Scroll Triggers</h3>
+        <p>Trigger animations based on scroll position with IntersectionObserver</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">E</div>
+        <h3>Parallax Effects</h3>
+        <p>Create depth with smooth parallax scrolling effects</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">F</div>
+        <h3>Color Morphing</h3>
+        <p>Animate colors smoothly between any hex or RGB values</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">G</div>
+        <h3>SVG Path Animation</h3>
+        <p>Animate elements along SVG paths with rotation</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">H</div>
+        <h3>Full Control</h3>
+        <p>Pause, resume, reverse, seek, and kill animations programmatically</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stagger Animation Demo -->
+  <div class="stagger-demo">
+    <h2>Stagger Animations</h2>
+    <p style="color: rgba(255,255,255,0.7); margin-bottom: 2rem;">Multiple elements animated with sequential delays</p>
+    <div class="stagger-grid">
+      <div class="stagger-item"></div>
+      <div class="stagger-item"></div>
+      <div class="stagger-item"></div>
+      <div class="stagger-item"></div>
+      <div class="stagger-item"></div>
+      <div class="stagger-item"></div>
+      <div class="stagger-item"></div>
+      <div class="stagger-item"></div>
+      <div class="stagger-item"></div>
+      <div class="stagger-item"></div>
+    </div>
+    <button class="btn" style="margin-top: 2rem;" onclick="animateStagger()">Replay Stagger</button>
+  </div>
+
+  <!-- Timeline Advanced Demo -->
+  <div class="timeline-demo">
+    <h2 class="timeline-title">Advanced Timeline</h2>
+    <p style="color: rgba(255,255,255,0.9);">Complex sequencing with labels and offsets</p>
+    <div class="timeline-boxes">
+      <div class="timeline-box">1</div>
+      <div class="timeline-box">2</div>
+      <div class="timeline-box">3</div>
+      <div class="timeline-box">4</div>
+    </div>
+    <button class="btn" style="margin-top: 2rem;" onclick="playTimeline()">Play Timeline</button>
+  </div>
+
+  <!-- Parallax Section -->
+  <div class="parallax-section">
+    <div class="parallax-bg">
+      <div class="parallax-layer" id="layer1" style="top: 10%; left: 10%;"></div>
+      <div class="parallax-layer" id="layer2" style="top: 60%; right: 10%;"></div>
+      <div class="parallax-layer" id="layer3" style="bottom: 10%; left: 50%;"></div>
+    </div>
+    <div class="parallax-content">
+      <h2>Smooth Parallax Effects</h2>
+      <p>Scroll-based animations that create depth and visual interest</p>
+      <div class="code-example">
+LumaAnimate.parallax('#element', {
+  speed: 0.5,
+  direction: 'vertical'
+});</div>
+    </div>
+  </div>
+
+  <!-- Spring Physics Demo -->
+  <div class="spring-physics">
+    <h2>Spring Physics</h2>
+    <p>Natural motion with customizable tension and friction</p>
+    <div class="spring-box" onclick="animateSpringBox()"></div>
+    <div class="code-example">
+LumaAnimate.to('.spring-box', {
+  transform: { translateY: -200 }
+}, {
+  duration: 2000,
+  easing: LumaAnimate.easing.spring(170, 26)
+});</div>
+  </div>
+
+  <!-- Load Animation Library -->
+  <script src="../dist/luma-animate.min.js"></script>
+  
+  <script>
+    // Hero animations on load
+    window.addEventListener('load', () => {
+      LumaAnimate.to('.hero-title', {
+        opacity: 1,
+        transform: { translateY: 0 }
+      }, {
+        duration: 1000,
+        easing: 'easeOutCubic'
+      });
+
+      LumaAnimate.to('.hero-desc', {
+        opacity: 1,
+        transform: { translateY: 0 }
+      }, {
+        duration: 1000,
+        delay: 300,
+        easing: 'easeOutCubic'
+      });
+
+      LumaAnimate.to('.hero-subtitle', {
+        opacity: 1,
+        transform: { translateY: 0 }
+      }, {
+        duration: 1000,
+        delay: 600,
+        easing: 'easeOutCubic'
+      });
+    });
+
+    // Scroll-triggered animations for demo cards
+    const cards = document.querySelectorAll('.demo-card');
+    cards.forEach((card, index) => {
+      LumaAnimate.scrollTrigger(card, {
+        animation: new LumaAnimate.to(card, {
+          opacity: 1,
+          transform: { translateY: 0 }
+        }, {
+          duration: 800,
+          delay: index * 100,
+          easing: 'easeOutCubic'
+        }),
+        once: true
+      });
+    });
+
+    // Feature items scroll trigger
+    const features = document.querySelectorAll('.feature-item');
+    features.forEach((item, index) => {
+      LumaAnimate.scrollTrigger(item, {
+        animation: new LumaAnimate.to(item, {
+          opacity: 1,
+          transform: { scale: 1 }
+        }, {
+          duration: 600,
+          delay: index * 80,
+          easing: 'easeOutBack'
+        }),
+        once: true
+      });
+    });
+
+    // Features title
+    LumaAnimate.scrollTrigger('.features-title', {
+      animation: new LumaAnimate.to('.features-title', {
+        opacity: 1,
+        transform: { translateY: 0 }
+      }, {
+        duration: 800,
+        easing: 'easeOutCubic'
+      }),
+      once: true
+    });
+
+    // Stats counter animation
+    const statItems = document.querySelectorAll('.stat-item');
+    statItems.forEach((item, index) => {
+      LumaAnimate.scrollTrigger(item, {
+        onEnter: () => {
+          LumaAnimate.to(item, {
+            opacity: 1,
+            transform: { translateY: 0 }
+          }, {
+            duration: 600,
+            delay: index * 100,
+            easing: 'easeOutCubic'
+          });
+
+          const number = item.querySelector('.stat-number');
+          const target = parseInt(number.getAttribute('data-target'));
+          let current = 0;
+          const increment = target / 50;
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              number.textContent = target;
+              clearInterval(timer);
+            } else {
+              number.textContent = Math.floor(current);
+            }
+          }, 30);
+        },
+        once: true
+      });
+    });
+
+    // Timeline scroll trigger
+    LumaAnimate.scrollTrigger('.timeline-title', {
+      animation: new LumaAnimate.to('.timeline-title', {
+        opacity: 1,
+        transform: { scale: 1 }
+      }, {
+        duration: 800,
+        easing: 'easeOutBack'
+      }),
+      once: true
+    });
+
+    // Parallax layers
+    LumaAnimate.parallax('#layer1', { speed: 0.3 });
+    LumaAnimate.parallax('#layer2', { speed: 0.5 });
+    LumaAnimate.parallax('#layer3', { speed: 0.2 });
+
+    // Individual demo functions
+    function animateFade() {
+      const box = document.querySelector('.fade-box');
+      box.style.opacity = '0';
+      LumaAnimate.to(box, { opacity: 1 }, { duration: 800, easing: 'easeOutCubic' });
+    }
+
+    function animateSlide() {
+      const box = document.querySelector('.fade-box');
+      box.style.transform = 'translateY(50px)';
+      box.style.opacity = '0';
+      LumaAnimate.to(box, {
+        transform: { translateY: 0 },
+        opacity: 1
+      }, { duration: 800, easing: 'easeOutCubic' });
+    }
+
+    function animateRotate() {
+      const box = document.querySelector('.transform-box');
+      LumaAnimate.to(box, {
+        transform: { rotate: 360 }
+      }, { duration: 1000, easing: 'easeInOutCubic' });
+    }
+
+    function animateScale() {
+      const box = document.querySelector('.transform-box');
+      LumaAnimate.to(box, {
+        transform: { scale: 1.5 }
+      }, { duration: 600, easing: 'easeOutBack', yoyo: true, repeat: 1 });
+    }
+
+    function animateFlip() {
+      const box = document.querySelector('.transform-box');
+      LumaAnimate.to(box, {
+        transform: { rotateY: 180 }
+      }, { duration: 800, easing: 'easeInOutBack' });
+    }
+
+    function animateColor() {
+      const box = document.querySelector('.color-box-demo');
+      LumaAnimate.to(box, {
+        backgroundColor: '#f5576c'
+      }, { duration: 1000, easing: 'easeInOutCubic', yoyo: true, repeat: 1 });
+    }
+
+    function animateBg() {
+      const box = document.querySelector('.color-box-demo');
+      const colors = ['#667eea', '#f093fb', '#4facfe', '#00f2fe', '#43e97b'];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      LumaAnimate.to(box, {
+        backgroundColor: randomColor
+      }, { duration: 800, easing: 'easeInOutCubic' });
+    }
+
+    function animateBounce() {
+      const box = document.querySelector('.physics-box');
+      box.style.transform = 'translateY(-100px)';
+      LumaAnimate.to(box, {
+        transform: { translateY: 0 }
+      }, { duration: 1200, easing: 'bounce' });
+    }
+
+    function animateElastic() {
+      const box = document.querySelector('.physics-box');
+      box.style.transform = 'scale(0.5)';
+      LumaAnimate.to(box, {
+        transform: { scale: 1 }
+      }, { duration: 1000, easing: 'easeOutElastic' });
+    }
+
+    function animateSpring() {
+      const box = document.querySelector('.physics-box');
+      box.style.transform = 'translateX(-100px)';
+      LumaAnimate.to(box, {
+        transform: { translateX: 0 }
+      }, {
+        duration: 2000,
+        easing: LumaAnimate.easing.spring(170, 26)
+      });
+    }
+
+    function animatePulse() {
+      const box = document.querySelector('.pulse-box');
+      LumaAnimate.to(box, {
+        transform: { scale: 1.2 }
+      }, { duration: 300, easing: 'easeInOutQuad', yoyo: true, repeat: 3 });
+    }
+
+    function animateShake() {
+      const box = document.querySelector('.pulse-box');
+      LumaAnimate.to(box, {
+        transform: { translateX: 10 }
+      }, { duration: 100, easing: 'linear', yoyo: true, repeat: 5 });
+    }
+
+    function animateHeartbeat() {
+      const box = document.querySelector('.pulse-box');
+      LumaAnimate.to(box, {
+        transform: { scale: 1.25 }
+      }, { duration: 200, easing: 'easeInOutQuad', yoyo: true, repeat: 4 });
+    }
+
+    function animateSequence() {
+      const box1 = document.querySelector('.seq-box-1');
+      const box2 = document.querySelector('.seq-box-2');
+      const box3 = document.querySelector('.seq-box-3');
+
+      const timeline = LumaAnimate.timeline();
+      
+      timeline
+        .to(box1, { transform: { translateY: -50, rotate: 360 } }, { duration: 600, easing: 'easeOutBack' })
+        .to(box2, { transform: { translateY: -50, rotate: 360 } }, { duration: 600, easing: 'easeOutBack' })
+        .to(box3, { transform: { translateY: -50, rotate: 360 } }, { duration: 600, easing: 'easeOutBack' })
+        .to([box1, box2, box3], { transform: { translateY: 0, rotate: 0 } }, { duration: 600, easing: 'bounce' })
+        .play();
+    }
+
+    function animateStagger() {
+      const items = document.querySelectorAll('.stagger-item');
+      items.forEach(item => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateY(50px) scale(0.5)';
+      });
+
+      LumaAnimate.stagger(items, {
+        opacity: 1,
+        transform: { translateY: 0, scale: 1 }
+      }, {
+        duration: 600,
+        easing: 'easeOutBack',
+        stagger: 80
+      });
+    }
+
+    function playTimeline() {
+      const boxes = document.querySelectorAll('.timeline-box');
+      boxes.forEach(box => {
+        box.style.opacity = '0';
+        box.style.transform = 'scale(0) rotate(-180deg)';
+      });
+
+      const tl = LumaAnimate.timeline();
+      
+      tl
+        .addLabel('start')
+        .to(boxes[0], { opacity: 1, transform: { scale: 1, rotate: 0 } }, { duration: 500, easing: 'easeOutBack' })
+        .to(boxes[1], { opacity: 1, transform: { scale: 1, rotate: 0 } }, { duration: 500, easing: 'easeOutBack' })
+        .to(boxes[2], { opacity: 1, transform: { scale: 1, rotate: 0 } }, { duration: 500, easing: 'easeOutBack' })
+        .to(boxes[3], { opacity: 1, transform: { scale: 1, rotate: 0 } }, { duration: 500, easing: 'easeOutBack' })
+        .addLabel('rotate')
+        .to(boxes, { transform: { rotate: 360 } }, { duration: 1000, easing: 'easeInOutCubic', position: 'rotate' })
+        .play();
+    }
+
+    function animateSpringBox() {
+      const box = document.querySelector('.spring-box');
+      LumaAnimate.to(box, {
+        transform: { translateY: -200 }
+      }, {
+        duration: 2000,
+        easing: LumaAnimate.easing.spring(170, 26),
+        yoyo: true,
+        repeat: 1
+      });
+    }
+
+    // Auto-trigger stagger on scroll
+    LumaAnimate.scrollTrigger('.stagger-demo', {
+      onEnter: () => {
+        setTimeout(animateStagger, 300);
+      },
+      once: true
+    });
+
+    // Auto-trigger timeline on scroll
+    LumaAnimate.scrollTrigger('.timeline-demo', {
+      onEnter: () => {
+        setTimeout(playTimeline, 300);
+      },
+      once: true
+    });
+  </script>
+
+</body>
+</html>

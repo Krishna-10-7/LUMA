@@ -1,8 +1,9 @@
 # ⚡ LumaJS
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/Krishna-10-7/LUMA/releases)
+[![Version](https://img.shields.io/badge/version-0.2.1-blue.svg)](https://github.com/Krishna-10-7/LUMA/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Bundle Size](https://img.shields.io/badge/bundle%20size-~8KB-brightgreen.svg)](https://github.com/Krishna-10-7/LUMA)
+[![Bundle Size](https://img.shields.io/badge/core-~8KB-brightgreen.svg)](https://github.com/Krishna-10-7/LUMA)
+[![Animation Size](https://img.shields.io/badge/animate-~14KB-brightgreen.svg)](https://github.com/Krishna-10-7/LUMA)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](dist/index.d.ts)
 
 **Next-generation JavaScript framework combining React-like reactivity, animations, and 3D capabilities in one lightweight library.**
@@ -11,8 +12,9 @@
 
 ---
 
-## 🌟 Step 1: Core Reactivity (Current)
+## 🌟 Current Status
 
+### ✅ Step 1: Core Reactivity (Complete)
 **Complete React-like framework** with functional components, hooks, and virtual DOM - all in **~8KB**!
 
 ✅ Functional Components  
@@ -20,6 +22,19 @@
 ✅ Virtual DOM Rendering  
 ✅ TypeScript Support  
 ✅ Production Ready
+
+### ✅ Step 2: Animation Engine (Complete)
+**Professional GSAP-like animation system** with advanced features - all in **~14KB**!
+
+✅ 30+ Easing Functions (including spring physics)  
+✅ Timeline Sequencing with Labels  
+✅ Stagger Animations  
+✅ Scroll Triggers (IntersectionObserver)  
+✅ Parallax Effects  
+✅ Color Morphing  
+✅ SVG Path Animations  
+✅ Advanced Controls (pause, resume, reverse, seek)  
+✅ 20+ Preset Animations
 
 ---
 
@@ -270,13 +285,305 @@ Open `demo-step1.html` in your browser to see:
 
 ---
 
-## 🗺️ Roadmap
+## 🎨 LumaAnimate - Animation Engine
+
+### Quick Start
+
+```html
+<script src="luma-animate.min.js"></script>
+<script>
+  // Basic animation
+  LumaAnimate.to('.box', {
+    transform: { translateX: 200, rotate: 360 },
+    opacity: 0.5
+  }, {
+    duration: 1000,
+    easing: 'easeOutCubic'
+  });
+</script>
+```
+
+### Core API
+
+#### `LumaAnimate.to(element, properties, options)`
+Animates element to target properties.
+
+```js
+LumaAnimate.to('.box', {
+  transform: { translateY: 100, scale: 1.2 },
+  backgroundColor: '#ff6b6b',
+  opacity: 1
+}, {
+  duration: 800,
+  delay: 200,
+  easing: 'easeOutBack',
+  onComplete: () => console.log('Done!')
+});
+```
+
+#### `LumaAnimate.from(element, properties, options)`
+Animates element from specified properties to current state.
+
+```js
+LumaAnimate.from('.box', {
+  opacity: 0,
+  transform: { translateY: -50 }
+}, {
+  duration: 600,
+  easing: 'easeOutCubic'
+});
+```
+
+#### `LumaAnimate.fromTo(element, from, to, options)`
+Animates element from specific start to end values.
+
+```js
+LumaAnimate.fromTo('.box',
+  { opacity: 0, transform: { scale: 0.5 } },
+  { opacity: 1, transform: { scale: 1 } },
+  { duration: 800, easing: 'easeOutBack' }
+);
+```
+
+### Transform Properties
+
+```js
+LumaAnimate.to('.element', {
+  transform: {
+    translateX: 100,      // Move horizontally
+    translateY: 50,       // Move vertically
+    rotate: 45,           // Rotate in degrees
+    rotateX: 30,          // 3D rotate on X axis
+    rotateY: 45,          // 3D rotate on Y axis
+    scale: 1.5,           // Scale uniformly
+    scaleX: 1.2,          // Scale horizontally
+    scaleY: 0.8,          // Scale vertically
+    skewX: 10,            // Skew horizontally
+    skewY: 5              // Skew vertically
+  }
+}, { duration: 1000 });
+```
+
+### Easing Functions (30+)
+
+```js
+// Basic
+'linear', 'easeInQuad', 'easeOutQuad', 'easeInOutQuad'
+
+// Cubic
+'easeInCubic', 'easeOutCubic', 'easeInOutCubic'
+
+// Quartic
+'easeInQuart', 'easeOutQuart', 'easeInOutQuart'
+
+// Quintic
+'easeInQuint', 'easeOutQuint'
+
+// Sine
+'easeInSine', 'easeOutSine', 'easeInOutSine'
+
+// Expo
+'easeInExpo', 'easeOutExpo', 'easeInOutExpo'
+
+// Circ
+'easeInCirc', 'easeOutCirc', 'easeInOutCirc'
+
+// Back
+'easeInBack', 'easeOutBack', 'easeInOutBack'
+
+// Elastic
+'elastic', 'easeInElastic', 'easeOutElastic', 'easeInOutElastic'
+
+// Bounce
+'bounce', 'easeInBounce', 'easeOutBounce', 'easeInOutBounce'
+
+// Spring Physics
+LumaAnimate.easing.spring(tension, friction)
+```
+
+### Timeline Sequencing
+
+Orchestrate complex animation sequences:
+
+```js
+const tl = LumaAnimate.timeline();
+
+tl
+  .to('.box1', { opacity: 1 }, { duration: 500 })
+  .to('.box2', { opacity: 1 }, { duration: 500 }) // After box1
+  .to('.box3', { opacity: 1 }, { duration: 500, position: '<' }) // Same time as box2
+  .addLabel('middle')
+  .to('.box4', { transform: { scale: 2 } }, { duration: 800, position: 'middle+200' })
+  .play();
+
+// Control timeline
+tl.pause();
+tl.resume();
+tl.restart();
+tl.seek(0.5); // Jump to 50%
+```
+
+### Stagger Animations
+
+Animate multiple elements with sequential delays:
+
+```js
+const boxes = document.querySelectorAll('.box');
+
+LumaAnimate.stagger(boxes, {
+  opacity: 1,
+  transform: { translateY: 0 }
+}, {
+  duration: 600,
+  stagger: 100, // 100ms delay between each
+  easing: 'easeOutBack'
+});
+```
+
+### Scroll Triggers
+
+Trigger animations on scroll:
+
+```js
+LumaAnimate.scrollTrigger('.element', {
+  animation: LumaAnimate.to('.element', {
+    opacity: 1,
+    transform: { translateY: 0 }
+  }, { duration: 800 }),
+  once: true, // Only trigger once
+  onEnter: (el) => console.log('Entered viewport'),
+  onLeave: (el) => console.log('Left viewport')
+});
+```
+
+### Parallax Effects
+
+```js
+LumaAnimate.parallax('.background', {
+  speed: 0.5,        // Slower than scroll
+  direction: 'vertical' // or 'horizontal'
+});
+```
+
+### Color Morphing
+
+```js
+LumaAnimate.to('.box', {
+  backgroundColor: '#ff6b6b', // Hex colors
+  color: 'rgb(100, 200, 255)', // RGB colors
+  borderColor: '#00ff00'
+}, { duration: 1000 });
+```
+
+### Preset Animations (20+)
+
+```js
+// Fade
+LumaAnimate.animate('.box', 'fadeIn');
+LumaAnimate.animate('.box', 'fadeOut');
+
+// Slide
+LumaAnimate.animate('.box', 'slideInLeft');
+LumaAnimate.animate('.box', 'slideInRight');
+LumaAnimate.animate('.box', 'slideInUp');
+LumaAnimate.animate('.box', 'slideInDown');
+
+// Zoom
+LumaAnimate.animate('.box', 'zoomIn');
+LumaAnimate.animate('.box', 'zoomOut');
+
+// Rotate
+LumaAnimate.animate('.box', 'rotateIn');
+LumaAnimate.animate('.box', 'rotateOut');
+
+// Flip
+LumaAnimate.animate('.box', 'flipInX');
+LumaAnimate.animate('.box', 'flipInY');
+
+// Attention Seekers
+LumaAnimate.animate('.box', 'bounce');
+LumaAnimate.animate('.box', 'pulse');
+LumaAnimate.animate('.box', 'shake');
+LumaAnimate.animate('.box', 'swing');
+LumaAnimate.animate('.box', 'rubberBand');
+LumaAnimate.animate('.box', 'heartBeat');
+```
+
+### Advanced Controls
+
+```js
+const anim = LumaAnimate.to('.box', {
+  transform: { translateX: 200 }
+}, {
+  duration: 2000,
+  repeat: 2,           // Repeat 2 times
+  yoyo: true,          // Reverse on repeat
+  repeatDelay: 500,    // Delay between repeats
+  onStart: () => console.log('Started'),
+  onUpdate: (progress) => console.log('Progress:', progress),
+  onComplete: () => console.log('Done')
+});
+
+// Control methods
+anim.pause();
+anim.resume();
+anim.reverse();
+anim.restart();
+anim.seek(0.5); // Jump to 50%
+anim.kill();    // Stop and cleanup
+```
+
+### Spring Physics
+
+Natural physics-based motion:
+
+```js
+LumaAnimate.to('.box', {
+  transform: { translateY: -200 }
+}, {
+  duration: 2000,
+  easing: LumaAnimate.easing.spring(170, 26) // tension, friction
+});
+
+// Presets
+const softSpring = LumaAnimate.easing.spring(80, 20);
+const stiffSpring = LumaAnimate.easing.spring(300, 30);
+```
+
+### SVG Path Animation
+
+```html
+<svg>
+  <path id="myPath" d="M 0,0 Q 100,100 200,0" />
+</svg>
+<div class="follower"></div>
+
+<script>
+LumaAnimate.pathAnimation('.follower', '#myPath', {
+  duration: 3000,
+  rotate: true, // Rotate along path
+  easing: 'easeInOutCubic'
+}).start();
+</script>
+```
+
+### Performance Tips
+
+1. **Use transforms instead of position properties** for better performance
+2. **Batch animations** with timelines or stagger
+3. **Use `will-change` CSS** for elements that will animate
+4. **Kill animations** when no longer needed
+5. **Prefer hardware-accelerated properties**: transform, opacity
+
+---
+
+## 🛣️ Roadmap
 
 | Step | Feature | Status |
 |------|---------|--------|
 | 1 | Core Reactivity | ✅ Complete |
-| 2 | Animation Engine (hover, scroll, click) | 🔜 Next |
-| 3 | 3D Integration (WebGL/Three.js) | 📅 Planned |
+| 2 | Animation Engine | ✅ Complete |
+| 3 | 3D Integration (WebGL/Three.js) | 🔜 Next |
 | 4 | Full Interactive 3D Website Demo | 📅 Planned |
 
 ---
