@@ -1,8 +1,25 @@
-# ⚡ LumaJS – Step 1: Core Reactivity
+# ⚡ LumaJS
 
-**LumaJS** is a next-generation JavaScript framework that combines **React-like reactivity**, **built-in animations**, and **3D capabilities** into a single lightweight library.
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/Krishna-10-7/LUMA/releases)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Bundle Size](https://img.shields.io/badge/bundle%20size-~8KB-brightgreen.svg)](https://github.com/Krishna-10-7/LUMA)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](dist/index.d.ts)
 
-> **Step 1 Status:** Core reactivity engine complete. Animation and 3D modules coming in Steps 2–4.
+**Next-generation JavaScript framework combining React-like reactivity, animations, and 3D capabilities in one lightweight library.**
+
+🚀 **[View Demo](https://krishna-10-7.github.io/LUMA/)** | 📖 **[Documentation](#documentation)** | 🎯 **[Hackathon Guide](STEP1_OVERVIEW.md)**
+
+---
+
+## 🌟 Step 1: Core Reactivity (Current)
+
+**Complete React-like framework** with functional components, hooks, and virtual DOM - all in **~8KB**!
+
+✅ Functional Components  
+✅ Full Hooks System (useState, useEffect, useRef, useMemo, useCallback)  
+✅ Virtual DOM Rendering  
+✅ TypeScript Support  
+✅ Production Ready
 
 ---
 
