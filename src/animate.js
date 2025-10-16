@@ -281,13 +281,13 @@
       if (this.isPaused) {
         this.isPaused = false;
         this.totalPausedTime += performance.now() - this.pausedTime;
-        this._animate();
+        this.animationFrame = requestAnimationFrame((time) => this._animate(time));
       } else {
         setTimeout(() => {
           this.isRunning = true;
-          this.startTime = performance.now();
+          this.startTime = null;
           if (this.onStart) this.onStart();
-          this._animate();
+          this.animationFrame = requestAnimationFrame((time) => this._animate(time));
         }, this.delay);
       }
       

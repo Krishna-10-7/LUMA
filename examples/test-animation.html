@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Animation Test</title>
+  <style>
+    body {
+      background: #1a1a2e;
+      color: white;
+      font-family: Arial;
+      padding: 50px;
+    }
+    .box {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Animation API Test</h1>
+  
+  <div>
+    <div class="box" id="box1">Box 1</div>
+    <div class="box" id="box2">Box 2</div>
+    <div class="box" id="box3">Box 3</div>
+  </div>
+
+  <div>
+    <button onclick="test1()">Test 1: Rotate</button>
+    <button onclick="test2()">Test 2: Scale</button>
+    <button onclick="test3()">Test 3: Move</button>
+    <button onclick="test4()">Test 4: Color</button>
+    <button onclick="test5()">Test 5: Bounce</button>
+    <button onclick="test6()">Test 6: Stagger</button>
+  </div>
+
+  <div id="output" style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 5px;"></div>
+
+  <script src="../dist/luma-animate.min.js"></script>
+  <script>
+    const log = (msg) => {
+      const output = document.getElementById('output');
+      output.innerHTML += msg + '<br>';
+      console.log(msg);
+    };
+
+    log('LumaAnimate loaded: ' + (typeof LumaAnimate !== 'undefined'));
+    log('Version: ' + (LumaAnimate ? LumaAnimate.version : 'N/A'));
+
+    function test1() {
+      log('Test 1: Rotate box1');
+      const box = document.getElementById('box1');
+      box.style.transform = ''; // Reset
+      
+      LumaAnimate.to(box, {
+        transform: { rotate: 360 }
+      }, {
+        duration: 1000,
+        easing: 'easeInOutCubic',
+        onComplete: () => log('Test 1 complete')
+      });
+    }
+
+    function test2() {
+      log('Test 2: Scale box1');
+      const box = document.getElementById('box1');
+      box.style.transform = '';
+      
+      LumaAnimate.to(box, {
+        transform: { scale: 1.5 }
+      }, {
+        duration: 600,
+        easing: 'easeOutBack',
+        yoyo: true,
+        repeat: 1,
+        onComplete: () => log('Test 2 complete')
+      });
+    }
+
+    function test3() {
+      log('Test 3: Move box1');
+      const box = document.getElementById('box1');
+      box.style.transform = '';
+      
+      LumaAnimate.to(box, {
+        transform: { translateX: 200 }
+      }, {
+        duration: 800,
+        easing: 'easeInOutCubic',
+        yoyo: true,
+        repeat: 1,
+        onComplete: () => log('Test 3 complete')
+      });
+    }
+
+    function test4() {
+      log('Test 4: Change color of box2');
+      const box = document.getElementById('box2');
+      
+      LumaAnimate.to(box, {
+        backgroundColor: '#ff6b6b'
+      }, {
+        duration: 1000,
+        easing: 'easeInOutCubic',
+        onComplete: () => log('Test 4 complete')
+      });
+    }
+
+    function test5() {
+      log('Test 5: Bounce box2');
+      const box = document.getElementById('box2');
+      box.style.transform = 'translateY(-100px)';
+      
+      setTimeout(() => {
+        LumaAnimate.to(box, {
+          transform: { translateY: 0 }
+        }, {
+          duration: 1200,
+          easing: 'bounce',
+          onComplete: () => log('Test 5 complete')
+        });
+      }, 100);
+    }
+
+    function test6() {
+      log('Test 6: Stagger all boxes');
+      const boxes = document.querySelectorAll('.box');
+      boxes.forEach(box => {
+        box.style.transform = 'translateY(50px) scale(0.5)';
+        box.style.opacity = '0';
+      });
+      
+      setTimeout(() => {
+        LumaAnimate.stagger(boxes, {
+          opacity: 1,
+          transform: { translateY: 0, scale: 1 }
+        }, {
+          duration: 600,
+          stagger: 150,
+          easing: 'easeOutBack',
+          onComplete: () => log('Test 6 complete')
+        });
+      }, 100);
+    }
+  </script>
+</body>
+</html>
