@@ -36,6 +36,18 @@
 ✅ Advanced Controls (pause, resume, reverse, seek)  
 ✅ 20+ Preset Animations
 
+### ✅ Step 3: 3D Engine (Complete)
+**Three.js-like WebGL 3D rendering** with declarative API - all in **~18KB**!
+
+✅ 3D Geometries (Box, Sphere, Plane)  
+✅ Phong Lighting & Shading  
+✅ Materials & Colors  
+✅ Camera System (Perspective)  
+✅ Orbit Controls  
+✅ Scene Graph  
+✅ Matrix Transformations  
+✅ WebGL Renderer
+
 ---
 
 ## 🎯 What is LumaJS?
@@ -577,14 +589,234 @@ LumaAnimate.pathAnimation('.follower', '#myPath', {
 
 ---
 
+## 🌟 Luma3D - 3D Engine
+
+### Quick Start
+
+```html
+<canvas id="canvas"></canvas>
+<script src="luma-3d.min.js"></script>
+<script>
+  // Setup
+  const canvas = document.getElementById('canvas');
+  const scene = new Luma3D.Scene();
+  const camera = new Luma3D.PerspectiveCamera(75, canvas.width / canvas.height, 0.1, 1000);
+  const renderer = new Luma3D.WebGLRenderer({ canvas });
+  
+  // Create 3D objects
+  const geometry = new Luma3D.BoxGeometry(1, 1, 1);
+  const material = new Luma3D.Material({ color: [1, 0.3, 0.3] });
+  const cube = new Luma3D.Mesh(geometry, material);
+  scene.add(cube);
+  
+  // Camera position
+  camera.position = [0, 0, 5];
+  
+  // Animation loop
+  function animate() {
+    cube.rotation[1] += 0.01;
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+```
+
+### Core API
+
+#### Scene
+```js
+const scene = new Luma3D.Scene();
+scene.add(mesh);      // Add object to scene
+scene.remove(mesh);   // Remove object
+
+// Lighting
+scene.lights.ambient.color = [0.3, 0.3, 0.4];
+scene.lights.directional.position = [5, 10, 7];
+scene.lights.directional.color = [1.2, 1.2, 1.0];
+```
+
+#### Camera
+```js
+const camera = new Luma3D.PerspectiveCamera(
+  fov = 75,         // Field of view in degrees
+  aspect = 1.6,     // Aspect ratio
+  near = 0.1,       // Near clipping plane
+  far = 1000        // Far clipping plane
+);
+
+camera.position = [0, 5, 10];
+camera.lookAt(0, 0, 0);
+```
+
+#### Geometries
+```js
+// Box
+const boxGeo = new Luma3D.BoxGeometry(width, height, depth);
+
+// Sphere
+const sphereGeo = new Luma3D.SphereGeometry(
+  radius = 1,
+  widthSegments = 32,
+  heightSegments = 16
+);
+
+// Plane
+const planeGeo = new Luma3D.PlaneGeometry(width, height);
+```
+
+#### Materials
+```js
+const material = new Luma3D.Material({
+  color: [1, 0.5, 0.2],        // RGB values 0-1
+  wireframe: false,             // Render as wireframe
+  shaderType: 'phong'           // 'basic' or 'phong'
+});
+```
+
+#### Mesh
+```js
+const mesh = new Luma3D.Mesh(geometry, material);
+
+// Transform
+mesh.position = [x, y, z];
+mesh.rotation = [rx, ry, rz];  // Radians
+mesh.scale = [sx, sy, sz];
+mesh.visible = true;
+```
+
+#### Renderer
+```js
+const renderer = new Luma3D.WebGLRenderer({ 
+  canvas: canvasElement 
+});
+
+renderer.render(scene, camera);        // Render frame
+renderer.setSize(width, height);       // Update size
+```
+
+#### Orbit Controls
+```js
+const controls = new Luma3D.OrbitControls(camera, canvas);
+
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.01;
+controls.update();  // Call in animation loop
+```
+
+### Complete Example
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  
+  <script src="luma-3d.min.js"></script>
+  <script>
+    const canvas = document.getElementById('canvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    // Setup scene
+    const scene = new Luma3D.Scene();
+    const camera = new Luma3D.PerspectiveCamera(
+      75, 
+      canvas.width / canvas.height, 
+      0.1, 
+      1000
+    );
+    const renderer = new Luma3D.WebGLRenderer({ canvas });
+    const controls = new Luma3D.OrbitControls(camera, canvas);
+    
+    // Create animated objects
+    const boxGeo = new Luma3D.BoxGeometry(1, 1, 1);
+    const sphereGeo = new Luma3D.SphereGeometry(0.7, 32, 16);
+    
+    // Central rotating cube
+    const cube = new Luma3D.Mesh(
+      boxGeo,
+      new Luma3D.Material({ color: [1, 0.3, 0.3] })
+    );
+    cube.position = [-1.5, 0, 0];
+    scene.add(cube);
+    
+    // Orbiting sphere
+    const sphere = new Luma3D.Mesh(
+      sphereGeo,
+      new Luma3D.Material({ color: [0.3, 0.5, 1] })
+    );
+    scene.add(sphere);
+    
+    // Ground plane
+    const plane = new Luma3D.Mesh(
+      new Luma3D.PlaneGeometry(10, 10),
+      new Luma3D.Material({ color: [0.3, 0.3, 0.3] })
+    );
+    plane.rotation = [Math.PI / 2, 0, 0];
+    plane.position = [0, -2, 0];
+    scene.add(plane);
+    
+    // Animation loop
+    let time = 0;
+    function animate() {
+      time += 0.016;
+      
+      // Rotate cube
+      cube.rotation[1] += 0.01;
+      
+      // Orbit sphere
+      sphere.position = [
+        Math.cos(time) * 3,
+        Math.sin(time * 2) * 0.5,
+        Math.sin(time) * 3
+      ];
+      sphere.rotation[0] += 0.02;
+      
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+    animate();
+    
+    // Handle resize
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      camera.aspect = canvas.width / canvas.height;
+      renderer.setSize(canvas.width, canvas.height);
+    });
+  </script>
+</body>
+</html>
+```
+
+### Features
+
+- **⚡ Lightweight**: ~18KB minified (vs Three.js ~580KB)
+- **🎨 Phong Lighting**: Realistic shading with ambient + directional lights
+- **📷 Camera Controls**: Built-in orbit controls with mouse/scroll
+- **📦 3D Geometries**: Box, Sphere, Plane (more coming)
+- **🖄 Matrix Math**: Full 3D transformations
+- **🎮 Interactive**: Drag to rotate, scroll to zoom
+- **🖥 WebGL**: Hardware-accelerated rendering
+
+---
+
 ## 🛣️ Roadmap
 
 | Step | Feature | Status |
 |------|---------|--------|
 | 1 | Core Reactivity | ✅ Complete |
 | 2 | Animation Engine | ✅ Complete |
-| 3 | 3D Integration (WebGL/Three.js) | 🔜 Next |
-| 4 | Full Interactive 3D Website Demo | 📅 Planned |
+| 3 | 3D Engine (WebGL) | ✅ Complete |
+| 4 | Full Interactive 3D Website Demo | 📅 Next |
 
 ---
 

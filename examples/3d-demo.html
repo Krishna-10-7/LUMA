@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Luma3D Demo - 3D WebGL Engine with Animations</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      overflow: hidden;
+    }
+    
+    #container {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+    
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+    }
+    
+    .title {
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      pointer-events: none;
+    }
+    
+    .title h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      letter-spacing: -1px;
+    }
+    
+    .title p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    
+    .info {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      pointer-events: auto;
+    }
+    
+    .info strong {
+      color: #fff;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <canvas id="canvas"></canvas>
+    
+    <div class="overlay">
+      <div class="title">
+        <h1>Luma3D Engine</h1>
+        <p>Real-time WebGL 3D Rendering with Phong Lighting</p>
+      </div>
+      
+      <div class="info">
+        <strong>Interactive Controls:</strong>
+        • Drag to rotate camera<br>
+        • Scroll to zoom in/out<br>
+        <br>
+        <strong>Features:</strong>
+        • 3D depth rendering<br>
+        • Phong shading & lighting<br>
+        • Complex animated geometries<br>
+        • Orbit camera controls
+      </div>
+    </div>
+  </div>
+
+  <script src="../dist/luma-3d.min.js"></script>
+  <script>
+    // Setup canvas
+    const canvas = document.getElementById('canvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    // Create scene
+    const scene = new Luma3D.Scene();
+    const camera = new Luma3D.PerspectiveCamera(60, canvas.width / canvas.height, 0.1, 1000);
+    const renderer = new Luma3D.WebGLRenderer({ canvas });
+    const controls = new Luma3D.OrbitControls(camera, canvas);
+    
+    // Setup lighting for dramatic effect
+    scene.lights.ambient.color = [0.3, 0.3, 0.4];
+    scene.lights.directional.position = [5, 10, 7];
+    scene.lights.directional.color = [1.2, 1.2, 1.0];
+    
+    // Create geometries
+    const boxGeo = new Luma3D.BoxGeometry(1, 1, 1);
+    const sphereGeo = new Luma3D.SphereGeometry(0.6, 32, 16);
+    
+    // Create animated objects in 3D space
+    const animatedObjects = [];
+    
+    // Central rotating tower of cubes
+    for (let i = 0; i < 5; i++) {
+      const mat = new Luma3D.Material({ 
+        color: [
+          0.8 - i * 0.15,
+          0.3 + i * 0.15,
+          1.0 - i * 0.1
+        ]
+      });
+      const cube = new Luma3D.Mesh(boxGeo, mat);
+      cube.position = [0, i * 1.5 - 3, 0];
+      cube.animData = { 
+        type: 'tower',
+        index: i,
+        speed: 0.01 + i * 0.002
+      };
+      scene.add(cube);
+      animatedObjects.push(cube);
+    }
+    
+    // Orbiting spheres at different depths
+    const colors = [
+      [1, 0.3, 0.3],
+      [0.3, 1, 0.3],
+      [1, 1, 0.3],
+      [1, 0.3, 1],
+      [0.3, 1, 1]
+    ];
+    
+    for (let i = 0; i < 5; i++) {
+      const mat = new Luma3D.Material({ color: colors[i] });
+      const sphere = new Luma3D.Mesh(sphereGeo, mat);
+      sphere.animData = {
+        type: 'orbit',
+        radius: 3 + i * 0.5,
+        speed: 0.015 + i * 0.003,
+        offset: (Math.PI * 2 * i) / 5,
+        height: Math.sin(i) * 2
+      };
+      scene.add(sphere);
+      animatedObjects.push(sphere);
+    }
+    
+    // Floating cubes in the background
+    for (let i = 0; i < 8; i++) {
+      const mat = new Luma3D.Material({ 
+        color: [
+          Math.random() * 0.5 + 0.5,
+          Math.random() * 0.5 + 0.5,
+          Math.random() * 0.5 + 0.5
+        ]
+      });
+      const cube = new Luma3D.Mesh(boxGeo, mat);
+      const angle = (Math.PI * 2 * i) / 8;
+      cube.position = [
+        Math.cos(angle) * 5,
+        (Math.random() - 0.5) * 4,
+        Math.sin(angle) * 5
+      ];
+      cube.scale = [0.4, 0.4, 0.4];
+      cube.animData = {
+        type: 'float',
+        baseY: cube.position[1],
+        speed: 0.02 + Math.random() * 0.02,
+        rotSpeed: [Math.random() * 0.02, Math.random() * 0.02, Math.random() * 0.02]
+      };
+      scene.add(cube);
+      animatedObjects.push(cube);
+    }
+    
+    // Ground plane for depth reference
+    const planeGeo = new Luma3D.PlaneGeometry(20, 20);
+    const planeMat = new Luma3D.Material({ color: [0.2, 0.2, 0.3] });
+    const plane = new Luma3D.Mesh(planeGeo, planeMat);
+    plane.rotation = [Math.PI / 2, 0, 0];
+    plane.position = [0, -4, 0];
+    scene.add(plane);
+    
+    // Animation loop
+    let time = 0;
+    
+    function animate() {
+      time += 0.016;
+      
+      animatedObjects.forEach(obj => {
+        const data = obj.animData;
+        
+        if (data.type === 'tower') {
+          // Rotate tower cubes
+          obj.rotation[1] += data.speed;
+          obj.rotation[0] = Math.sin(time * 0.5 + data.index) * 0.3;
+          
+          // Pulse scale
+          const scale = 1 + Math.sin(time * 2 + data.index) * 0.1;
+          obj.scale = [scale, scale, scale];
+        }
+        else if (data.type === 'orbit') {
+          // Orbit around center
+          const angle = time * data.speed + data.offset;
+          obj.position = [
+            Math.cos(angle) * data.radius,
+            data.height + Math.sin(time * 0.8 + data.offset) * 0.5,
+            Math.sin(angle) * data.radius
+          ];
+          
+          // Rotate
+          obj.rotation[0] += 0.02;
+          obj.rotation[1] += 0.015;
+        }
+        else if (data.type === 'float') {
+          // Float up and down
+          obj.position[1] = data.baseY + Math.sin(time * data.speed) * 0.8;
+          
+          // Rotate
+          obj.rotation[0] += data.rotSpeed[0];
+          obj.rotation[1] += data.rotSpeed[1];
+          obj.rotation[2] += data.rotSpeed[2];
+        }
+      });
+      
+      // Update controls and render
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+    
+    // Start animation
+    animate();
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      camera.aspect = canvas.width / canvas.height;
+      renderer.setSize(canvas.width, canvas.height);
+    });
+    
+    console.log('Luma3D v' + Luma3D.version + ' - 3D Engine loaded successfully!');
+    console.log('Scene objects:', scene.children.length);
+  </script>
+</body>
+</html>

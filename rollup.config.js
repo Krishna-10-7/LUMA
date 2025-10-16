@@ -34,5 +34,9 @@ export default [
   
   // LumaAnimate - Standalone Animation Engine
   createConfig('src/animate.js', 'umd', 'dist/luma-animate.js', 'LumaAnimate'),
-  createConfig('src/animate.js', 'umd', 'dist/luma-animate.min.js', 'LumaAnimate', true)
+  createConfig('src/animate.js', 'umd', 'dist/luma-animate.min.js', 'LumaAnimate', true),
+  
+  // Luma3D - Standalone 3D Engine
+  createConfig('src/3d.js', 'umd', 'dist/luma-3d.js', 'Luma3D'),
+  createConfig('src/3d.js', 'umd', 'dist/luma-3d.min.js', 'Luma3D', true)
 ];
