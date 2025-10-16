@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LumaJS - Next-Gen JavaScript Framework</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #667eea;
+      --secondary: #764ba2;
+      --accent: #f093fb;
+      --dark: #1a1a2e;
+      --light: #ffffff;
+      --text-muted: rgba(255,255,255,0.7);
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--dark);
+      color: var(--light);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(26, 26, 46, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    nav .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    nav .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    nav .menu {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    
+    nav .menu a {
+      color: var(--light);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    nav .menu a:hover {
+      color: var(--accent);
+    }
+    
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 2rem;
+      background: linear-gradient(135deg, var(--dark) 0%, #2d2d44 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+      border-radius: 50%;
+      top: -200px;
+      right: -200px;
+      opacity: 0.3;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+      border-radius: 50%;
+      bottom: -150px;
+      left: -150px;
+      opacity: 0.3;
+      animation: float 8s ease-in-out infinite reverse;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) translateX(0px); }
+      50% { transform: translateY(30px) translateX(30px); }
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+    
+    .hero h1 {
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--light), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero p {
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 0.875rem 2rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--light);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: var(--light);
+      border: 2px solid var(--primary);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+    }
+    
+    /* Features Section */
+    .features {
+      padding: 5rem 2rem;
+      background: var(--dark);
+    }
+    
+    .features .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      background: linear-gradient(135deg, var(--light), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    
+    .feature-card {
+      background: rgba(255,255,255,0.05);
+      padding: 2rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+      background: rgba(255,255,255,0.08);
+      border-color: var(--primary);
+    }
+    
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--light);
+    }
+    
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    
+    /* Live Demo Section */
+    .live-demo {
+      padding: 5rem 2rem;
+      background: linear-gradient(135deg, #2d2d44 0%, var(--dark) 100%);
+    }
+    
+    .live-demo .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .demo-wrapper {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .demo-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .demo-tab {
+      padding: 0.75rem 1.5rem;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 10px;
+      color: var(--light);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .demo-tab.active {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+    
+    .demo-content {
+      background: rgba(0,0,0,0.3);
+      border-radius: 15px;
+      padding: 2rem;
+      min-height: 300px;
+    }
+    
+    /* Interactive Counter Demo */
+    .counter-demo {
+      text-align: center;
+    }
+    
+    .counter-value {
+      font-size: 5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 2rem 0;
+    }
+    
+    .counter-controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    /* Todo Demo */
+    .todo-demo input {
+      width: 100%;
+      padding: 1rem;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      color: var(--light);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .todo-demo input::placeholder {
+      color: var(--text-muted);
+    }
+    
+    .todo-list {
+      list-style: none;
+      margin-top: 1rem;
+    }
+    
+    .todo-item {
+      background: rgba(255,255,255,0.08);
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .todo-item.completed {
+      opacity: 0.5;
+      text-decoration: line-through;
+    }
+    
+    .todo-delete {
+      background: #ff5252;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    /* Stats Section */
+    .stats {
+      padding: 5rem 2rem;
+      background: var(--dark);
+    }
+    
+    .stats .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: center;
+    }
+    
+    .stat-card {
+      padding: 2rem;
+    }
+    
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+    
+    /* Footer */
+    footer {
+      padding: 3rem 2rem;
+      background: rgba(0,0,0,0.3);
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    footer p {
+      color: var(--text-muted);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav .menu {
+        gap: 1rem;
+        font-size: 0.9rem;
+      }
+      
+      .hero {
+        padding: 5rem 1rem 2rem;
+      }
+      
+      .features, .live-demo, .stats {
+        padding: 3rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="container">
+      <div class="logo">⚡ LumaJS</div>
+      <ul class="menu">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#demo">Demo</a></li>
+        <li><a href="#docs">Docs</a></li>
+        <li><a href="https://github.com/lumajs/core">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>One Framework.<br>Infinite Possibilities.</h1>
+      <p>Replace React + GSAP + Three.js with a single lightweight library. Build reactive UIs, animations, and 3D experiences in minutes.</p>
+      <div class="cta-buttons">
+        <a href="#demo" class="btn btn-primary">See It In Action</a>
+        <a href="#docs" class="btn btn-secondary">Get Started</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container">
+      <h2 class="section-title">Why Choose LumaJS?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Reactive & Fast</h3>
+          <p>Fine-grained reactivity with minimal DOM updates. Only 6KB core bundle.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>Built-in Animations</h3>
+          <p>Scroll, hover, click triggers without external libraries. Coming in Step 2.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3>3D Ready</h3>
+          <p>Declarative 3D API on top of WebGL. No Three.js setup needed. Coming in Step 3.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔧</div>
+          <h3>Zero Config</h3>
+          <p>Works directly in browsers. No bundlers, no complex setup. Just one &lt;script&gt; tag.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Responsive</h3>
+          <p>Mobile-first design. Adapts to any screen size automatically.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3>Production Ready</h3>
+          <p>TypeScript definitions, npm package, comprehensive tests.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Demo Section -->
+  <section class="live-demo" id="demo">
+    <div class="container">
+      <h2 class="section-title">Interactive Demo</h2>
+      <div class="demo-wrapper">
+        <div class="demo-tabs">
+          <button class="demo-tab active" l-on:click="switchDemo('counter')">Counter</button>
+          <button class="demo-tab" l-on:click="switchDemo('todo')">Todo List</button>
+          <button class="demo-tab" l-on:click="switchDemo('form')">Form Binding</button>
+        </div>
+        
+        <div class="demo-content">
+          <!-- Counter Demo -->
+          <div class="counter-demo" l-show="activeDemo === 'counter'" id="counter-demo">
+            <h3>Reactive Counter</h3>
+            <div class="counter-value" l-text="count"></div>
+            <div class="counter-controls">
+              <button class="btn btn-primary" l-on:click="count++">Increment</button>
+              <button class="btn btn-secondary" l-on:click="count--">Decrement</button>
+              <button class="btn btn-secondary" l-on:click="count = 0">Reset</button>
+            </div>
+          </div>
+          
+          <!-- Todo Demo -->
+          <div class="todo-demo" l-show="activeDemo === 'todo'" id="todo-demo">
+            <h3>Reactive Todo List</h3>
+            <input 
+              type="text" 
+              l-model="newTodo" 
+              placeholder="What needs to be done?"
+              l-on:keydown="if(event.key === 'Enter') addTodo()">
+            <button class="btn btn-primary" l-on:click="addTodo()" style="width: 100%;">Add Todo</button>
+            <ul class="todo-list">
+              <!-- Todos will be rendered here -->
+            </ul>
+            <p style="text-align: center; margin-top: 1rem; color: var(--text-muted);">
+              <span l-text="todos.length"></span> total tasks
+            </p>
+          </div>
+          
+          <!-- Form Demo -->
+          <div class="form-demo" l-show="activeDemo === 'form'" id="form-demo">
+            <h3>Two-Way Data Binding</h3>
+            <input type="text" l-model="username" placeholder="Your name" style="width: 100%; padding: 1rem; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); border-radius: 10px; color: white; margin-bottom: 1rem;">
+            <input type="email" l-model="email" placeholder="Your email" style="width: 100%; padding: 1rem; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); border-radius: 10px; color: white; margin-bottom: 1rem;">
+            <div style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 10px; margin-top: 1rem;">
+              <p><strong>Live Preview:</strong></p>
+              <p>Name: <span l-text="username || '(empty)'"></span></p>
+              <p>Email: <span l-text="email || '(empty)'"></span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats">
+    <div class="container">
+      <h2 class="section-title">By The Numbers</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">~6KB</div>
+          <div class="stat-label">Core Bundle Size</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">3-in-1</div>
+          <div class="stat-label">Replaces Multiple Libraries</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">0</div>
+          <div class="stat-label">Build Config Required</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">TypeScript Support</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 LumaJS. Open source under MIT License.</p>
+    <p style="margin-top: 0.5rem;">Built with ❤️ for the web development community.</p>
+  </footer>
+
+  <script src="../src/index.js"></script>
+  <script>
+    // Main app state
+    const mainApp = Luma.mount('body', {
+      state: {
+        activeDemo: 'counter',
+        count: 0,
+        newTodo: '',
+        todos: [],
+        username: '',
+        email: ''
+      },
+      methods: {
+        switchDemo(demo) {
+          this.state.activeDemo = demo;
+          // Update tab styles
+          document.querySelectorAll('.demo-tab').forEach(tab => {
+            tab.classList.remove('active');
+          });
+          event.target.classList.add('active');
+        },
+        addTodo() {
+          const text = this.state.newTodo.trim();
+          if (!text) return;
+          this.state.todos.push({ id: Date.now(), text, done: false });
+          this.state.newTodo = '';
+          this.renderTodos();
+        },
+        toggleTodo(id) {
+          const todo = this.state.todos.find(t => t.id === id);
+          if (todo) todo.done = !todo.done;
+          this.renderTodos();
+        },
+        deleteTodo(id) {
+          this.state.todos = this.state.todos.filter(t => t.id !== id);
+          this.renderTodos();
+        },
+        renderTodos() {
+          const ul = document.querySelector('.todo-list');
+          if (!ul) return;
+          ul.innerHTML = this.state.todos.map(todo => `
+            <li class="todo-item ${todo.done ? 'completed' : ''}">
+              <span>
+                <input type="checkbox" ${todo.done ? 'checked' : ''} onchange="mainApp.methods.toggleTodo(${todo.id})" style="margin-right: 0.5rem;">
+                ${todo.text}
+              </span>
+              <button class="todo-delete" onclick="mainApp.methods.deleteTodo(${todo.id})">Delete</button>
+            </li>
+          `).join('');
+        }
+      }
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

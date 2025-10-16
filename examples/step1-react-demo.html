@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LumaJS Step 1 - React-like Components Demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 3rem;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h2 {
+      color: #667eea;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      background: #667eea;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin: 0.25rem;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .counter-display {
+      font-size: 4rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 2rem 0;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .todo-list {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .todo-item {
+      background: #f5f5f5;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s;
+    }
+
+    .todo-item.completed {
+      opacity: 0.6;
+      text-decoration: line-through;
+    }
+
+    .todo-item:hover {
+      background: #e0e0e0;
+    }
+
+    .todo-text {
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .delete-btn {
+      background: #ff5252;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    .stats {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f5f5f5;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+    }
+
+    .stat {
+      flex: 1;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .timer-display {
+      font-size: 3rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 1.5rem 0;
+      font-family: 'Courier New', monospace;
+      color: #333;
+    }
+
+    .code-compare {
+      grid-column: 1 / -1;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 2rem;
+      border-radius: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .code-compare h2 {
+      color: #4ec9b0;
+      margin-bottom: 1rem;
+    }
+
+    .code-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    .code-block {
+      background: #2d2d2d;
+      padding: 1.5rem;
+      border-radius: 10px;
+      border: 1px solid #3e3e3e;
+    }
+
+    .code-title {
+      color: #569cd6;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #3e3e3e;
+    }
+
+    .keyword { color: #c586c0; }
+    .function { color: #dcdcaa; }
+    .string { color: #ce9178; }
+    .comment { color: #6a9955; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>⚡ LumaJS - Step 1</h1>
+      <p>React-like Components with Hooks</p>
+    </div>
+
+    <div class="demo-grid">
+      <!-- Counter Component -->
+      <div class="card">
+        <h2>🔢 Counter <span class="badge">useState</span></h2>
+        <div id="counter-demo"></div>
+      </div>
+
+      <!-- Todo List Component -->
+      <div class="card">
+        <h2>✅ Todo List <span class="badge">useState</span> <span class="badge">useEffect</span></h2>
+        <div id="todo-demo"></div>
+      </div>
+
+      <!-- Timer Component -->
+      <div class="card">
+        <h2>⏱️ Timer <span class="badge">useState</span> <span class="badge">useEffect</span></h2>
+        <div id="timer-demo"></div>
+      </div>
+
+      <!-- Real-time Search Component -->
+      <div class="card">
+        <h2>🔍 Live Search <span class="badge">useMemo</span></h2>
+        <div id="search-demo"></div>
+      </div>
+
+      <!-- Code Comparison -->
+      <div class="code-compare">
+        <h2>📝 Side-by-Side: React vs LumaJS</h2>
+        <div class="code-section">
+          <div class="code-block">
+            <div class="code-title">React Code</div>
+            <pre><span class="keyword">import</span> React, { useState } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">function</span> <span class="function">Counter</span>() {
+  <span class="keyword">const</span> [count, setCount] = <span class="function">useState</span>(<span class="string">0</span>);
+  
+  <span class="keyword">return</span> (
+    <span class="keyword">&lt;div&gt;</span>
+      <span class="keyword">&lt;h1&gt;</span>{count}<span class="keyword">&lt;/h1&gt;</span>
+      <span class="keyword">&lt;button</span> onClick={() => <span class="function">setCount</span>(count + 1)}<span class="keyword">&gt;</span>
+        Increment
+      <span class="keyword">&lt;/button&gt;</span>
+    <span class="keyword">&lt;/div&gt;</span>
+  );
+}</pre>
+          </div>
+          <div class="code-block">
+            <div class="code-title">LumaJS Code</div>
+            <pre><span class="keyword">const</span> { h, useState } = Luma;
+
+<span class="keyword">function</span> <span class="function">Counter</span>() {
+  <span class="keyword">const</span> [count, setCount] = <span class="function">useState</span>(<span class="string">0</span>);
+  
+  <span class="keyword">return</span> <span class="function">h</span>(<span class="string">'div'</span>, {},
+    <span class="function">h</span>(<span class="string">'h1'</span>, {}, count),
+    <span class="function">h</span>(<span class="string">'button'</span>, { 
+      onClick: () => <span class="function">setCount</span>(count + 1) 
+    }, <span class="string">'Increment'</span>)
+  );
+}</pre>
+          </div>
+        </div>
+        <p style="margin-top: 1.5rem; opacity: 0.8;">
+          <strong>Same API, No JSX needed!</strong> LumaJS provides a React-compatible API with hooks, 
+          but without the build step. Use h() directly or add JSX support with Babel/ESBuild.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="../src/index.js"></script>
+  <script>
+    const { h, render, useState, useEffect, useMemo, useRef } = Luma;
+
+    // ==================== COUNTER COMPONENT ====================
+    function Counter() {
+      const [count, setCount] = useState(0);
+
+      return h('div', {},
+        h('div', { className: 'counter-display' }, count),
+        h('div', { style: { textAlign: 'center' } },
+          h('button', { onClick: () => setCount(count + 1) }, '+ Increment'),
+          h('button', { onClick: () => setCount(count - 1) }, '- Decrement'),
+          h('button', { onClick: () => setCount(0) }, '🔄 Reset')
+        )
+      );
+    }
+
+    render(h(Counter), '#counter-demo');
+
+    // ==================== TODO LIST COMPONENT ====================
+    function TodoApp() {
+      const [todos, setTodos] = useState([]);
+      const [input, setInput] = useState('');
+
+      // Effect: Log when todos change
+      useEffect(() => {
+        console.log(`📝 Todos changed: ${todos.length} items`);
+      }, [todos.length]);
+
+      const addTodo = () => {
+        if (input.trim()) {
+          setTodos([...todos, { id: Date.now(), text: input, completed: false }]);
+          setInput('');
+        }
+      };
+
+      const toggleTodo = (id) => {
+        setTodos(todos.map(todo =>
+          todo.id === id ? { ...todo, completed: !todo.completed } : todo
+        ));
+      };
+
+      const deleteTodo = (id) => {
+        setTodos(todos.filter(todo => todo.id !== id));
+      };
+
+      const stats = useMemo(() => ({
+        total: todos.length,
+        active: todos.filter(t => !t.completed).length,
+        completed: todos.filter(t => t.completed).length
+      }), [todos]);
+
+      return h('div', {},
+        h('input', {
+          type: 'text',
+          placeholder: 'What needs to be done?',
+          value: input,
+          onInput: (e) => setInput(e.target.value),
+          onKeydown: (e) => e.key === 'Enter' && addTodo()
+        }),
+        h('button', { 
+          onClick: addTodo,
+          style: { width: '100%' }
+        }, '+ Add Todo'),
+        h('ul', { className: 'todo-list' },
+          ...todos.map(todo =>
+            h('li', { 
+              key: todo.id,
+              className: `todo-item ${todo.completed ? 'completed' : ''}`
+            },
+              h('span', { 
+                className: 'todo-text',
+                onClick: () => toggleTodo(todo.id)
+              }, `${todo.completed ? '✓' : '○'} ${todo.text}`),
+              h('button', { 
+                className: 'delete-btn',
+                onClick: () => deleteTodo(todo.id) 
+              }, '🗑️')
+            )
+          )
+        ),
+        h('div', { className: 'stats' },
+          h('div', { className: 'stat' },
+            h('div', { className: 'stat-number' }, stats.total),
+            h('div', { className: 'stat-label' }, 'Total')
+          ),
+          h('div', { className: 'stat' },
+            h('div', { className: 'stat-number' }, stats.active),
+            h('div', { className: 'stat-label' }, 'Active')
+          ),
+          h('div', { className: 'stat' },
+            h('div', { className: 'stat-number' }, stats.completed),
+            h('div', { className: 'stat-label' }, 'Done')
+          )
+        )
+      );
+    }
+
+    render(h(TodoApp), '#todo-demo');
+
+    // ==================== TIMER COMPONENT ====================
+    function Timer() {
+      const [seconds, setSeconds] = useState(0);
+      const [isRunning, setIsRunning] = useState(false);
+
+      useEffect(() => {
+        let interval;
+        if (isRunning) {
+          interval = setInterval(() => {
+            setSeconds(s => s + 1);
+          }, 1000);
+        }
+        return () => clearInterval(interval);
+      }, [isRunning]);
+
+      const formatTime = (sec) => {
+        const mins = Math.floor(sec / 60);
+        const secs = sec % 60;
+        return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      };
+
+      return h('div', {},
+        h('div', { className: 'timer-display' }, formatTime(seconds)),
+        h('div', { style: { textAlign: 'center' } },
+          h('button', {
+            onClick: () => setIsRunning(!isRunning)
+          }, isRunning ? '⏸️ Pause' : '▶️ Start'),
+          h('button', {
+            onClick: () => {
+              setSeconds(0);
+              setIsRunning(false);
+            }
+          }, '⏹️ Reset')
+        )
+      );
+    }
+
+    render(h(Timer), '#timer-demo');
+
+    // ==================== SEARCH COMPONENT ====================
+    function SearchDemo() {
+      const [query, setQuery] = useState('');
+      const allItems = ['React', 'Vue', 'Angular', 'Svelte', 'Solid', 'LumaJS', 'Preact', 'Alpine'];
+
+      // useMemo: Only recompute when query changes
+      const filteredItems = useMemo(() => {
+        console.log('🔍 Filtering items...');
+        return allItems.filter(item =>
+          item.toLowerCase().includes(query.toLowerCase())
+        );
+      }, [query]);
+
+      return h('div', {},
+        h('input', {
+          type: 'text',
+          placeholder: 'Search frameworks...',
+          value: query,
+          onInput: (e) => setQuery(e.target.value)
+        }),
+        h('p', { style: { margin: '1rem 0', color: '#666' } },
+          `Found ${filteredItems.length} results`
+        ),
+        h('ul', { className: 'todo-list' },
+          ...filteredItems.map(item =>
+            h('li', {
+              key: item,
+              className: 'todo-item',
+              style: { cursor: 'default' }
+            }, `🔹 ${item}`)
+          )
+        )
+      );
+    }
+
+    render(h(SearchDemo), '#search-demo');
+  </script>
+</body>
+</html>

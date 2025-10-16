@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LumaJS Step 1 Demo – Core Reactivity</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 2rem; }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .subtitle { font-size: 1rem; opacity: 0.9; margin-bottom: 2rem; }
+    .section { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .section h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+    .section p { margin-bottom: 1rem; opacity: 0.95; line-height: 1.5; }
+    button { background: #fff; color: #667eea; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.15s; }
+    button:hover { transform: translateY(-2px); }
+    button:active { transform: translateY(0); }
+    input, select { padding: 0.75rem; border-radius: 6px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.2); color: #fff; font-size: 1rem; width: 100%; margin-bottom: 1rem; }
+    input::placeholder { color: rgba(255,255,255,0.6); }
+    input:focus, select:focus { outline: none; border-color: #fff; }
+    .counter { font-size: 3rem; font-weight: bold; text-align: center; margin: 1rem 0; }
+    .btn-group { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .todo-list { list-style: none; margin-top: 1rem; }
+    .todo-item { background: rgba(255,255,255,0.15); padding: 0.75rem 1rem; border-radius: 6px; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .todo-item.completed { opacity: 0.5; text-decoration: line-through; }
+    .todo-delete { background: #ff5252; color: #fff; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+    .todo-toggle { margin-right: 0.5rem; cursor: pointer; }
+    .form-output { background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 6px; margin-top: 1rem; font-family: 'Courier New', monospace; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚡ LumaJS – Step 1</h1>
+    <p class="subtitle">Reactive Core Engine (No Animations Yet)</p>
+
+    <!-- Counter Demo -->
+    <div class="section" id="counter-app">
+      <h2>🔢 Counter Demo</h2>
+      <p>State automatically updates the DOM. No manual DOM manipulation needed.</p>
+      <div class="counter" l-text="count"></div>
+      <div class="btn-group">
+        <button l-on:click="count++">Increment</button>
+        <button l-on:click="count--">Decrement</button>
+        <button l-on:click="count = 0">Reset</button>
+        <button l-on:click="count += 10">+10</button>
+      </div>
+    </div>
+
+    <!-- Form Binding Demo -->
+    <div class="section" id="form-app">
+      <h2>📝 Two-Way Binding Demo</h2>
+      <p>Inputs automatically sync with state. Change any field to see live updates.</p>
+      <input type="text" l-model="name" placeholder="Enter your name">
+      <input type="email" l-model="email" placeholder="Enter your email">
+      <input type="number" l-model="age" placeholder="Your age">
+      <select l-model="country">
+        <option value="">Select Country</option>
+        <option value="USA">USA</option>
+        <option value="Canada">Canada</option>
+        <option value="UK">UK</option>
+        <option value="India">India</option>
+        <option value="Other">Other</option>
+      </select>
+      <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+        <input type="checkbox" l-model="subscribe" style="width: auto;">
+        Subscribe to newsletter
+      </label>
+      <div class="form-output">
+        <strong>Live State:</strong><br>
+        Name: <span l-text="name || '(empty)'"></span><br>
+        Email: <span l-text="email || '(empty)'"></span><br>
+        Age: <span l-text="age || '(empty)'"></span><br>
+        Country: <span l-text="country || '(empty)'"></span><br>
+        Subscribed: <span l-text="subscribe ? 'Yes' : 'No'"></span>
+      </div>
+    </div>
+
+    <!-- Todo List Demo -->
+    <div class="section" id="todo-app">
+      <h2>✅ Todo List Demo</h2>
+      <p>Add, toggle, and delete todos. All managed by reactive state.</p>
+      <input type="text" l-model="newTodo" placeholder="What needs to be done?" l-on:keydown="if(event.key === 'Enter') addTodo()">
+      <button l-on:click="addTodo()" style="width: 100%; margin-bottom: 1rem;">Add Todo</button>
+      <div l-show="todos.length === 0" style="text-align: center; opacity: 0.7; padding: 2rem;">
+        No todos yet. Add one above!
+      </div>
+      <ul class="todo-list" l-show="todos.length > 0">
+        <!-- Note: In production, we'd use l-for directive. For demo, we inject dynamically via methods. -->
+      </ul>
+      <p style="margin-top: 1rem; text-align: center; opacity: 0.8;">
+        <span l-text="todos.length"></span> total | 
+        <span l-text="todos.filter(t => !t.done).length"></span> active | 
+        <span l-text="todos.filter(t => t.done).length"></span> completed
+      </p>
+    </div>
+
+    <!-- Conditional Rendering Demo -->
+    <div class="section" id="conditional-app">
+      <h2>👁️ Conditional Rendering Demo</h2>
+      <p>Show/hide content based on state. No manual style changes needed.</p>
+      <button l-on:click="showMessage = !showMessage">Toggle Message</button>
+      <div l-show="showMessage" style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.2); border-radius: 6px;">
+        🎉 This message is conditionally rendered using <code>l-show</code>!
+      </div>
+    </div>
+
+    <!-- Computed Values Demo -->
+    <div class="section" id="computed-app">
+      <h2>🧮 Computed Values Demo</h2>
+      <p>Automatically computed derived state.</p>
+      <input type="number" l-model="price" placeholder="Price" style="width: calc(50% - 0.5rem); display: inline-block;">
+      <input type="number" l-model="quantity" placeholder="Quantity" style="width: calc(50% - 0.5rem); display: inline-block; margin-left: 1rem;">
+      <div style="margin-top: 1rem; font-size: 1.5rem; text-align: center;">
+        Total: $<span l-text="(price || 0) * (quantity || 0)"></span>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../src/index.js"></script>
+  <script>
+    // Counter App
+    Luma.mount('#counter-app', {
+      state: { count: 0 }
+    });
+
+    // Form App
+    Luma.mount('#form-app', {
+      state: { name: '', email: '', age: '', country: '', subscribe: false }
+    });
+
+    // Todo App
+    const todoCtx = Luma.mount('#todo-app', {
+      state: {
+        newTodo: '',
+        todos: []
+      },
+      methods: {
+        addTodo() {
+          const text = this.state.newTodo.trim();
+          if (!text) return;
+          this.state.todos.push({ id: Date.now(), text, done: false });
+          this.state.newTodo = '';
+          this.renderTodos();
+        },
+        toggleTodo(id) {
+          const todo = this.state.todos.find(t => t.id === id);
+          if (todo) todo.done = !todo.done;
+          this.renderTodos();
+        },
+        deleteTodo(id) {
+          this.state.todos = this.state.todos.filter(t => t.id !== id);
+          this.renderTodos();
+        },
+        renderTodos() {
+          const ul = document.querySelector('#todo-app .todo-list');
+          ul.innerHTML = this.state.todos.map(todo => `
+            <li class="todo-item ${todo.done ? 'completed' : ''}">
+              <span>
+                <input type="checkbox" class="todo-toggle" ${todo.done ? 'checked' : ''} onchange="todoCtx.methods.toggleTodo(${todo.id})">
+                ${todo.text}
+              </span>
+              <button class="todo-delete" onclick="todoCtx.methods.deleteTodo(${todo.id})">Delete</button>
+            </li>
+          `).join('');
+        }
+      }
+    });
+
+    // Conditional App
+    Luma.mount('#conditional-app', {
+      state: { showMessage: false }
+    });
+
+    // Computed App
+    Luma.mount('#computed-app', {
+      state: { price: 0, quantity: 0 }
+    });
+  </script>
+</body>
+</html>
