@@ -1,5 +1,5 @@
 {
-  "name": "@lumajs/core",
+  "name": "@krishna.dev1/lumajs",
   "version": "0.3.0",
   "type": "module",
   "description": "Next-generation JavaScript framework combining React-like reactivity, GSAP-style animations, and Three.js-like 3D rendering in one lightweight library (~40KB total)",
